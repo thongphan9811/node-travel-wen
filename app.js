@@ -11,11 +11,15 @@ const LocationRouter = require('./routes/admin/location');
 const postRouter = require('./routes/tourguide/post');
 var app = express();
 const mongoose = require('mongoose');
+global.WEB_URL = 'http://localhost:3000';
 
 const ConnectMongoDB = async () => {
   try {
 
     mongoose.connect('mongodb://localhost:27017/travel-nodejs', { useNewUrlParser: true, useUnifiedTopology: true });
+    mongoose.set('useNewUrlParser', true);
+    mongoose.set('useFindAndModify', false);
+    mongoose.set('useCreateIndex', true);
     console.log("ket noi thanh cong");
   } catch (err) {
     console.log("ket noi csdl loi :" + err);
@@ -32,18 +36,19 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/USER',UserRouter.router);
-app.use('/adminlocation',LocationRouter);
-app.use('/post',postRouter);
+//app.use('/users', usersRouter);
+app.use('/users', UserRouter.router);
+app.use('/adminlocation', LocationRouter);
+app.use('/post', postRouter);
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};

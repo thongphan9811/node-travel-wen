@@ -1,119 +1,23 @@
 var express = require('express');
 var router = express.Router();
-const UserModel = require('../../model/User');
-const bcrypt = require('bcrypt');
-const Constant = require('../../constants/index');
 const token_key = 'asdasdhs';
-const jwt = require('jsonwebtoken');
-const cookie = require('cookie');
 const UnvaliableModel = require('../../model/unvaliableDay');
 const midleware = require('../../midleware/Auth');
 const postModel = require('../../model/post');
 const bookModel = require('../../model/booked');
+const UserController = require('../../controller/user');
 //register
-router.post('/', async (req, res) => {
-    try {
-        const { name, email, phone, birthDay, password, role } = req.body;
-        const date = birthDay.split('-');
-        const MyDate = new Date(date[0], date[1] - 1, date[2]);
-        if (!email) throw " bạn cần nhập email";
-        if (!password) throw "bạn cần nhập password";
-        //kiem tra email da ton tai chua
-        const checkUser = await UserModel.findOne({ email });
-        if (checkUser) throw "email đã được đăng ký";
-        const salt = bcrypt.genSaltSync(10);
-        const hash = bcrypt.hashSync(password, salt);
-        switch (role.toLowerCase()) {
-            case 'customer':
-                try {
-                    const ClassUser = new UserModel({ name, email, phone, birthDay: MyDate, password: hash, role: Constant.ROLE.CUSTOMER });
-                    //save customer
-                    const customer = await ClassUser.save();
-                    return res.json({
-                        code: 200,
-                        mess: " dang ki thanh cong ,chao mung customer",
-                        data: customer
-                    })
-                } catch (err) {
-                    const error = { staus: 400, stack: err }
-                    return res.render('error', error);
-                }
-            case 'tourguide':
-                try {
-                    console.log("hihihi");
-                    const ClassTourGuide = new UserModel({ name, email, phone, birthDay: MyDate, password: hash, role: Constant.ROLE.TOURGUIDE });
-                    const tourguide = await ClassTourGuide.save();
-                    console.log(tourguide);
-                    if (tourguide) {
-                        try {
-                            console.log("hihihi")
-                            const unvaliClass = new UnvaliableModel({ createBy: tourguide._id });
-                            const UnvaliSave = await unvaliClass.save();
-                        } catch (err) {
-                            console.log(err);
-                            return
-                        }
-
-                    }
-                    return res.json({
-                        code: 200,
-                        mess: " dang ki thanh cong ,chao mung tourguide",
-                        data: tourguide
-                    })
-                } catch (err) {
-                    const error = { staus: 400, stack: err }
-                    return res.render('error', error);
-                }
-            case 'admin':
-                try {
-                    const ClassTourGuide = new UserModel({ name, email, phone, birthDay: MyDate, password: hash, role: Constant.ROLE.ADMIN });
-                    const admin = await ClassTourGuide.save();
-
-                    return res.json({
-                        code: 200,
-                        mess: " dang ki thanh cong ,chao mung admin",
-                        data: admin
-                    })
-                } catch (err) {
-                    const error = { staus: 400, stack: err }
-                    return res.render('error', error);
-                }
-        }
-    } catch (error) {
-        return res.json({ code: 400, mess: error, data: null });
-    }
-})
-router.post('/login', async (req, res) => {
-    try {
-        const { email, password } = req.body;
-        if (!email) throw " ban can nhap email";
-        if (!password) throw "ban can nhap password";
-        const findUser = await UserModel.findOne({ email });
-        if (!findUser) throw "ban chua dang ky hoac nhap sai email";
-        const checkPass = await bcrypt.compareSync(password, findUser.password);
-        if (!checkPass) throw "ban nhap sai password";
-        findUser.password = undefined;
-        findUser.email = undefined;
-        const JsonUser = JSON.parse(JSON.stringify(findUser));
-        const token = jwt.sign(JsonUser, token_key);
-        res.setHeader('set-cookie', cookie.serialize('sessoin-token', token, {
-            httpOnly: true,
-            path: '/',
-            maxAge: 60 * 60 * 24 * 7 // 1 week
-        }));
-        return res.json({
-            code: 200,
-            mess: "dang nhap thanh cong",
-            data: { JsonUser }
-        });
-    } catch (err) {
+router.get('/home',UserController.home);
+router.post('/register',UserController.create);
+router.get('/login', function(req,res,next){
+    try{
+        return res.render('login',{url:WEB_URL});
+    }catch(err){
         console.log(err);
-        return res.json({
-            code: 400,
-            mess: err
-        })
-    }
-})
+        next(err);
+    };
+});
+router.post('/login', UserController.login)
 router.post('/booking', midleware.authUsers, async (req, res) => {
     try {
         const { postID, note } = req.body;
