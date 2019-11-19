@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const schema = new Schema({
-    createBy:{type:Schema.Types.ObjectId},
+    createBy:{type:Schema.Types.ObjectId,require:true },
     nameLocation :{type:String ,unique:true , require:true},
     description:String,
     isDelete :{type:Boolean , default :false}
@@ -15,7 +15,7 @@ schema.pre('save',async function(next){
         }
         next();
     }catch(err){
-        throw new Error(err.message);
+        throw new Error(err);
     }
 })
 const locationModel = mongoose.model('Location',schema);

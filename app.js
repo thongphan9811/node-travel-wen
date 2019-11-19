@@ -9,6 +9,7 @@ var usersRouter = require('./routes/users');
 const UserRouter = require('./routes/user/user');
 const LocationRouter = require('./routes/admin/location');
 const postRouter = require('./routes/tourguide/post');
+const adminPostRouter = require('./routes/admin/post');
 var app = express();
 const mongoose = require('mongoose');
 global.WEB_URL = 'http://localhost:3000';
@@ -35,13 +36,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.use('public',express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 //app.use('/users', usersRouter);
 app.use('/users', UserRouter.router);
 app.use('/adminlocation', LocationRouter);
 app.use('/post', postRouter);
+app.use('/adminPost',adminPostRouter);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));

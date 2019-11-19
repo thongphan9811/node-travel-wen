@@ -2,10 +2,11 @@ const postModel = require('../model/post');
 const create = async function (body) {
     try {
         const postClass = new postModel(body);
-        const post = await postModel.save();
+        const post = await postClass.save();
+        console.log(post,"+++++++++++++++++++++++++++");
         return post;
     } catch (err) {
-        throw new Error(e.message);
+        throw new Error(err.message);
     };
 };
 const update = async function (user,_id, body) {

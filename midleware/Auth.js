@@ -1,11 +1,13 @@
 const jwt = require('jsonwebtoken');
+var cookie = require('cookie');
 const userRouter = require('../routes/user/user');
 const formidable = require('formidable');
 const postModel = require('../model/post');
 const token_key = 'asdasdhs';
 const authTourGuide = async (req, res, next) => {
     try {
-        const token = req.header('sessoin-token');
+        const cookiess = cookie.parse(req.headers.cookie || '');
+        const token = cookiess['sessoin-token'];
         if (!token) throw "ban can dang nhap";
         const decode = await jwt.verify(token, token_key);
         req.user = decode;
@@ -21,11 +23,11 @@ const authTourGuide = async (req, res, next) => {
 
 const authUsers = async (req, res, next) => {
     try {
-        const token = req.header('sessoin-token');
-        if (!token) throw " ban can dang nhap ";
+        const cookiess = cookie.parse(req.headers.cookie || '');
+        const token = cookiess['sessoin-token'];
+        if (!token) { req.user =null; next() }
         const decode = await jwt.verify(token, token_key);
-        req.user = decode;
-       // console.log(UserRouter.token_key);
+        req.user = decode;  
         next();
     } catch (err) {
         return res.json({
@@ -37,12 +39,11 @@ const authUsers = async (req, res, next) => {
 }
 const authAdmin = async (req, res, next) => {
     try {
-        console.log(UserRouter.token_key);
-        const token = req.header('sessoin-token');
+        const cookiess = cookie.parse(req.headers.cookie || '');
+        const token = cookiess['sessoin-token'];
         if (!token) throw " ban can dang nhap ";
         const decode = await jwt.verify(token, token_key);
-        req.user = decode;
-        console.log(decode);    
+        req.user = decode;  
         if (req.user.role != "admin") throw "ban khong co quyen su dung chuc nang nay";
         next();
     } catch (err) {
@@ -61,8 +62,7 @@ const authAdminTourGuide = async (req, res, next) => {
         const token = req.header('sessoin-token');
         if (!token) throw " ban can dang nhap ";
         const decode = await jwt.verify(token, token_key);
-        req.user = decode;
-        console.log(decode);    
+        req.user = decode;   
         if (req.user.role != "admin"||req.user.role!="tourguide") throw "ban khong co quyen su dung chuc nang nay";
         next();
     } catch (err) {
@@ -74,4 +74,22 @@ const authAdminTourGuide = async (req, res, next) => {
         });
     }
 }
-module.exports = { authUsers, authTourGuide, authAdmin,authAdminTourGuide };
+const authLogin = async (req,res,next)=>{
+    try{
+        const cookiess = cookie.parse(req.headers.cookie || '');
+        const token = cookiess['sessoin-token'];
+        if(token){
+            const decode = await jwt.verify(token, token_key);
+            req.user = decode;
+            if(req.user.role == 'admin'){
+                res.redirect('/users/admin');
+            }
+            res.redirect('/home');
+        }
+        next();
+    }catch(err){
+        res.json({code:400,mess:err});
+    }
+}
+
+module.exports = { authUsers, authTourGuide, authAdmin,authAdminTourGuide ,authLogin};

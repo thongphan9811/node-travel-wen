@@ -1,0 +1,216 @@
+<div>
+    <div>
+        <button type="button" class="btn btn-primary" data-target="#postForm" data-toggle="modal"> thêm mới bài
+            đăng</button>
+        <div class="modal fade" id="postForm" %> tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">tạo bài post mới</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form enctype="multipart/form-data" class="form-horizontal" method="post" action=<%=url+"/adminPost" %> >
+                            <div class="form-group">
+                                <label for="email" class="cols-sm-2 control-label">người hướng dẫn</label>
+                                <div class="cols-sm-10">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-envelope fa"
+                                                aria-hidden="true"></i></span>
+                                        <select name="tourGuideID" class="form-control" id="exampleFormControlSelect1">
+                                            <% tourGuide.forEach(function(tourGD){ %>
+                                            <option value=<%=tourGD._id %>> <%=tourGD.username %> </option>
+                                            <%})%>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="username" class="cols-sm-2 control-label">Username</label>
+                                <div class="cols-sm-10">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-users fa"
+                                                aria-hidden="true"></i></span>
+                                        <select name="localtionID" class="form-control" id="exampleFormControlSelect1">
+                                            <% location.forEach(function(locationDetail){ %>
+                                            <option value=<%=locationDetail._id %>> <%=locationDetail.nameLocation %>
+                                            </option>
+                                            <%})%>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="name" class="cols-sm-2 control-label">post name</label>
+                                <div class="cols-sm-10">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-user fa"
+                                                aria-hidden="true"></i></span>
+                                        <input type="text" class="form-control" name="name" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="password" class="cols-sm-2 control-label">description</label>
+                                <div class="cols-sm-10">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-lock fa-lg"
+                                                aria-hidden="true"></i></span>
+                                        <input type="text" class="form-control" name="description" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="password" class="cols-sm-2 control-label">content</label>
+                                <div class="cols-sm-10">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-lock fa-lg"
+                                                aria-hidden="true"></i></span>
+                                        <input type="text" class="form-control" name="content" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="password" class="cols-sm-2 control-label">plan</label>
+                                <div class="cols-sm-10">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-lock fa-lg"
+                                                aria-hidden="true"></i></span>
+                                        <input type="text" class="form-control" name="plan" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="password" class="cols-sm-2 control-label">price</label>
+                                <div class="cols-sm-10">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-lock fa-lg"
+                                                aria-hidden="true"></i></span>
+                                        <input type="number" class="form-control" name="price" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="password" class="cols-sm-2 control-label">image</label>
+                                <div class="cols-sm-10">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-lock fa-lg"
+                                                aria-hidden="true"></i></span>
+                                        <input type="file" class="form-control" name="image" />
+                                    </div>
+                                </div>
+                            </div> 
+                            <div class="form-group ">
+                                <button type="submit"
+                                    class="btn btn-primary btn-lg btn-block login-button">post</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">tourGuideID</th>
+                <th scope="col">location</th>
+                <th scope="col">price</th>
+                <th scope="col">image</th>
+                <th scope="col">status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% post.forEach(function(item){ %>
+            <tr>
+                <th><%= item.tourGuideID; %></th>
+                <th><%= item.localtionID %></th>
+                <th><%= item.price; %></th>
+                <th><img src=<%=url+'/'+item.image[0]; %>  height="100px" width="100px" /></th>
+                <th><%= item.status; %></th>
+                <th>
+                    <button type="button" class="btn btn-primary" data-target="#" data-toggle="modal">update</button>
+                    <div class="modal fade" id='' tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">detail User</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action=<%= url + '/users/home/qluser'; %> method="post">
+                                        <div>
+                                            <i class="fas fa-lock prefix"></i>
+                                            <label for="form14" class="">User name</label>
+                                            <input type="username" name="username" class="form-control form-control-sm">
+                                        </div>
+
+                                        <div>
+                                            <i class="fas fa-lock prefix"></i>
+                                            <label for="form5">email</label>
+                                            <input type="email" name="email" class="form-control form-control-sm">
+                                        </div>
+                                        <div>
+                                            <i class="fas fa-lock prefix"></i>
+                                            <label for="form5">phone</label>
+                                            <input type="number" name="phone" class="form-control form-control-sm">
+                                        </div>
+                                        <div>
+                                            <i class="fas fa-lock prefix"></i>
+                                            <label for="form5">birth day</label>
+                                            <input type="date" name="birthDay" class="form-control form-control-sm">
+                                        </div>
+                                        <div>
+                                            <i class="fas fa-lock prefix"></i>
+                                            <label for="form6">Repeat password</label>
+                                            <input type="text" name="password" class="form-control form-control-sm">
+                                        </div>
+                                        <div>
+                                            <i class="fas fa-lock prefix"></i>
+                                            <input type="hidden" name="_id" class="form-control form-control-sm">
+                                        </div>
+                                        <div>
+                                            <button type="submit" class="btn btn-info waves-effect waves-light">update
+                                                <i class="fas fa-sign-in ml-1"></i>
+                                            </button>
+                                        </div>
+                                    </form>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </th>
+                <th>
+                    <form action=<%= url + '/users/home/qluser'; %> method="post">
+                        <div>
+                            <input type="hidden" name="isDelete" value="true">
+                            <input type="hidden" name="_id">
+                        </div>
+                        <div>
+                            <button type="submit" class="btn btn-primary"> delete </button>
+                        </div>
+                    </form>
+                </th>
+            </tr>
+            <% }) %>
+        </tbody>
+    </table>
+
+    <script>
+        $(document).ready(function () {
+            $('#haha').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget)
+
+            })
+        });
+    </script>

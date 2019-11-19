@@ -6,18 +6,16 @@ const midleware = require('../../midleware/Auth');
 const postModel = require('../../model/post');
 const bookModel = require('../../model/booked');
 const UserController = require('../../controller/user');
-//register
-router.get('/home',UserController.home);
-router.post('/register',UserController.create);
-router.get('/login', function(req,res,next){
-    try{
-        return res.render('login',{url:WEB_URL});
-    }catch(err){
-        console.log(err);
-        next(err);
-    };
-});
-router.post('/login', UserController.login)
+router.get('/home',midleware.authUsers,UserController.home);
+router.post('/register',midleware.authAdmin,UserController.create);
+router.get('/login',midleware.authLogin, UserController.getLoginform);
+router.post('/login', UserController.login);
+router.get('/logout',UserController.logout);
+// Admin
+router.get('/home/qluser',midleware.authAdmin,UserController.getallUser);
+router.get('/admin',midleware.authAdmin,UserController.adminhome);
+router.post('/home/qluser',midleware.authAdmin,UserController.update);
+
 router.post('/booking', midleware.authUsers, async (req, res) => {
     try {
         const { postID, note } = req.body;
