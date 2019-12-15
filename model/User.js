@@ -30,17 +30,14 @@ schema.pre('save', async function (next) {
             const salt = bcrypt.genSaltSync(10);
             const hash = bcrypt.hashSync(_this.password, salt);
             this.password = hash;
-            console.log(this.password);
         }
         if (this.isNew) {
             const usernameQuery = await UserModel.findOne({ username: _this.username });
             const emailQuery = await UserModel.findOne({ email: _this.email });
-            console.log(usernameQuery);
             if (usernameQuery) {console.log("hahahha"); throw new Error('username da ton tai');}
             if (emailQuery) {console.log("huhuhuhu"); throw new Error('email da ton tai');}
         }
-        console.log(this.password);
-        next();
+        return next();
     }catch (error) {
         throw new Error(error);
     }

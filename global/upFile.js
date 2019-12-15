@@ -4,27 +4,27 @@ const promise1 = function async(req) {
     const form = new formidable.IncomingForm();
     form.uploadDir = './public/images';
     const body = {};
-    let image = [];
+    let images = [];
     let title = '';
     form.multiples = true;
     form.parse(req)
     form.on("fileBegin", function (err, file) {
-      const path = file.path;
-      const type = file.type;
-      const newPath = path + '.' + type
+      file.path = file.path+'.jpg' ;
     })
       .on('file', function (name, file) {
-        image.push(file.path);
+        images.push(file.path.slice(6));
       })
       .on('field', function (name, field) {
-        body[name] = field;
         console.log(body);
+        body[name] = field;
       })
       .on('error', function (err) {
+        console.log(err);
         reject(err);
       })
       .on('end', function () {
-        body[image] = image;
+        body['image'] = images;
+        console.log(body.image);
         resolve({ body})
       })
   })

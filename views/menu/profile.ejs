@@ -1,0 +1,139 @@
+<div class="container">
+
+
+    <fieldset>
+
+        <!-- Form Name -->
+        <legend>
+            <center>
+                <h2><b>thông tin cá nhân</b></h2>
+            </center>
+        </legend><br>
+
+
+        <!-- Text input-->
+
+        <div class="form-group">
+            <label class="col-md-4 control-label">Username</label>
+            <div class="col-md-4 inputGroupContainer">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                    <input id="username" placeholder="username" class="submit" value=<%=user.username %>
+                        class="form-control" type="text">
+                </div>
+            </div>
+        </div>
+
+        <!-- Text input-->
+
+        <div class="form-group">
+            <label class="col-md-4 control-label">Password</label>
+            <div class="col-md-4 inputGroupContainer">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                    <input name="user_password" placeholder="Password" class="submit" class="form-control"
+                        type="password">
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label">E-Mail</label>
+            <div class="col-md-4 inputGroupContainer">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+                    <input name="email" placeholder="E-Mail Address" class="submit" value=<%=user.email %>
+                        class="form-control" type="text">
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Text input-->
+
+        <div class="form-group">
+            <label class="col-md-4 control-label">Contact No.</label>
+            <div class="col-md-4 inputGroupContainer">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-earphone"></i></span>
+                    <input name="contact_no" placeholder="(639)" class="submit" value=<%=user.phone %>
+                        class="form-control" type="text">
+                </div>
+            </div>
+        </div>
+
+        <!-- Select Basic -->
+
+        <!-- Success message -->
+        <div class="alert alert-success" role="alert" id="success_message">Success <i
+                class="glyphicon glyphicon-thumbs-up"></i> Success!.</div>
+
+        <!-- Button -->
+        <div class="form-group">
+            <label class="col-md-4 control-label"></label>
+            <div class="col-md-4"><br>
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<button type="submit" id="submit"
+                    class="btn btn-warning">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspSUBMIT <span
+                        class="glyphicon glyphicon-send submit"></span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</button>
+            </div>
+        </div>
+
+    </fieldset>
+
+</div>
+</div><!-- /.container -->
+<script>
+    $(document).ready(function () {
+
+        $('#submit').click(function () {
+            let data = []
+            const _this = $(this);
+            $('.submit').each(function () {
+                data.push($(this).val());
+            })
+            console.log(data);
+            function checkInp(input) {
+
+                if (isNaN(input)) {
+                    alert("Must input numbers");
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+            const body = {
+                username: data[0],
+                email: data[2],
+                password: data[1],
+                phone: data[3]
+            }
+            console.log(body)
+            if (body.password == "") {
+                delete body.password;
+            }
+            console.log(body);
+            if (checkInp(body.phone)) {
+                $.ajax({
+                    type: "POST",
+                    url: "http://localhost:3000/users/home/qluser",
+                    data: body,
+                    success: function (data) {
+                        console.log(data);
+                        $("#username").text(data.username);
+                        alert('Success!', data.mess, data.data)
+                    },
+                    error: function (err, message) {
+                        //show error message
+                        console.log(err.responseJSON.message, "huhuhu", err.responseText, "haha");
+                        alert('text status ' + ', err ' + err.responseJSON.message)
+                    }
+                });
+            };
+
+
+
+        });
+    });
+</script>

@@ -1,24 +1,34 @@
 const locationModel = require('../model/location');
 
-const create = async function (data) {
+const created = async function (data) {
     try {
         const locationClass = new locationModel(data);
         const location = await locationClass.save();
         return locationClass;
     }catch(err){
         console.log(err);
-        return err;
+     throw new Error(err);
     }
 };
-const update = async function(_id,data){
+const update = async function(_id,body){
     try{
+        
+        const data = {};
         const locationUP = await locationModel.findById(_id);
-        if(!locationUP) throw "khong tim thay location can update";
+        if(!locationUP) throw new Error ("khong tim thay location can update");
+        for(const key in body){
+            if(body[key]){
+                data[key] = body[key];
+            }
+        }
+        console.log(data);
         locationUP.set(data);
+
         const locationUpdated = await locationUP.save();
         return locationUpdated;
     }catch(err){
-        return err;
+        console.log(err);
+        throw new Error(err.message);
     }
 };
 const getByIdLocation = async function(_id){
@@ -31,11 +41,11 @@ const getByIdLocation = async function(_id){
 };
 const getAllLocation = async function(){
     try{
-        const allLocation = locationModel.find();
+        const allLocation = await locationModel.find({isDelete:false});
         return allLocation;
-
     }catch(err){
-        throw new Error(err.message);
+        console.log(err);
+        throw new Error(err);
     }
 };
-module.exports = {create,update,getByIdLocation,getAllLocation};
+module.exports = {created,update,getByIdLocation,getAllLocation};
