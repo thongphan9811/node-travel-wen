@@ -1,13 +1,12 @@
 <div>
     <div>
-        <button type="button" class="btn btn-primary" data-target="#loginFrom" data-toggle="modal">Create New
-            User</button>
+        <button type="button" class="btn btn-primary" data-target="#loginFrom" data-toggle="modal">tạo mới người dùng</button>
         <div class="modal fade" id="loginFrom" %> tabindex="-1" role="dialog"
             aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Create New User</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">tạo mới người dùng </h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -15,7 +14,7 @@
                     <div class="modal-body">
                         <form class="form-horizontal" method="post" action=<%=url+"/users/register" %>>
                             <div class="form-group">
-                                <label for="email" class="cols-sm-2 control-label">Your Email</label>
+                                <label for="email" class="cols-sm-2 control-label">email</label>
                                 <div class="cols-sm-10">
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="fa fa-envelope fa"
@@ -26,7 +25,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="username" class="cols-sm-2 control-label">Username</label>
+                                <label for="username" class="cols-sm-2 control-label">tên tài khoản</label>
                                 <div class="cols-sm-10">
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="fa fa-users fa"
@@ -37,7 +36,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="name" class="cols-sm-2 control-label">Your phone</label>
+                                <label for="name" class="cols-sm-2 control-label">số điện thoại</label>
                                 <div class="cols-sm-10">
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="fa fa-user fa"
@@ -48,7 +47,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="password" class="cols-sm-2 control-label">Password</label>
+                                <label for="password" class="cols-sm-2 control-label">mật khẩu</label>
                                 <div class="cols-sm-10">
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="fa fa-lock fa-lg"
@@ -58,20 +57,17 @@
                                     </div>
                                 </div>
                             </div>
-                            <input type="radio" name="role" value="customer"> customer<br>
-                            <input type="radio" name="role" value="tourguide"> tourguide<br>
+                            <input type="radio" name="role" value="customer"> khách hàng <br>
+                            <input type="radio" name="role" value="tourguide"> hướng dẫn viên<br>
                             <div class="form-group ">
                                 <button type="submit"
-                                    class="btn btn-primary btn-lg btn-block login-button">Register</button>
-                            </div>
-                            <div class="login-register">
-                                <a href="index.php">Login</a>
+                                    class="btn btn-primary btn-lg btn-block login-button">đăng ký</button>
                             </div>
                         </form>
 
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
                     </div>
                 </div>
             </div>
@@ -81,9 +77,9 @@
         <thead>
             <tr>
                 <th scope="col">_id</th>
-                <th scope="col">username</th>
-                <th scope="col">phone</th>
-                <th scope="col">role</th>
+                <th scope="col">tên tài khoản</th>
+                <th scope="col">số điện thoại</th>
+                <th scope="col">quyền </th>
                 <th scope="col">email</th>
             </tr>
         </thead>
@@ -97,13 +93,13 @@
                 <th><%= userdetail.email; %></th>
                 <th>
                     <button type="button" class="btn btn-primary" data-target=<%="#"+userdetail.username; %>
-                        data-toggle="modal">update</button>
+                        data-toggle="modal">xem chi tiết</button>
                     <div class="modal fade" id=<%=userdetail.username; %> tabindex="-1" role="dialog"
                         aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">detail User</h5>
+                                    <h5 class="modal-title" id="exampleModalLabel">chi tiết người dùng</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -112,7 +108,7 @@
                                     <form action=<%= url + '/users/home/qluser'; %> method="post">
                                         <div>
                                             <i class="fas fa-lock prefix"></i>
-                                            <label for="form14" class="">User name</label>
+                                            <label for="form14" class="">tên tài khoản</label>
                                             <input type="username" name="username" value=<%= userdetail.username; %>
                                                 class="form-control form-control-sm">
                                         </div>
@@ -125,19 +121,19 @@
                                         </div>
                                         <div>
                                             <i class="fas fa-lock prefix"></i>
-                                            <label for="form5">phone</label>
+                                            <label for="form5">số điện thoại</label>
                                             <input type="number" name="phone" value=<%=userdetail.phone; %>
                                                 class="form-control form-control-sm">
                                         </div>
                                         <div>
                                             <i class="fas fa-lock prefix"></i>
-                                            <label for="form5">birth day</label>
+                                            <label for="form5">sinh nhật</label>
                                             <input type="date" name="birthDay" value=<%=userdetail.birthday; %>
                                                 class="form-control form-control-sm">
                                         </div>
                                         <div>
                                             <i class="fas fa-lock prefix"></i>
-                                            <label for="form6">Repeat password</label>
+                                            <label for="form6">mật khẩu cần cập nhật</label>
                                             <input type="text" name="password" class="form-control form-control-sm">
                                         </div>
                                         <div>
@@ -146,7 +142,7 @@
                                                 class="form-control form-control-sm">
                                         </div>
                                         <div>
-                                            <button type="submit" class="btn btn-info waves-effect waves-light">update
+                                            <button type="submit" class="btn btn-info waves-effect waves-light">cập nhật
                                                 <i class="fas fa-sign-in ml-1"></i>
                                             </button>
                                         </div>
@@ -154,7 +150,7 @@
 
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
                                 </div>
                             </div>
                         </div>
@@ -165,9 +161,10 @@
                         <div>
                             <input type="hidden" name="isDelete" value="true">
                             <input type="hidden" name="_id" value=<%=userdetail._id %>>
+                            <input type="hidden" name="role" value=<%=userdetail.role %>>
                         </div>
                         <div>
-                            <button type="submit" class="btn btn-primary"> delete </button>
+                            <button type="submit" class="btn btn-primary"> Xóa </button>
                         </div>
                     </form>
                 </th>

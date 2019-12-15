@@ -1,0 +1,329 @@
+<div>
+    <div>
+        <button type="button" class="btn btn-primary" data-target="#postForm" data-toggle="modal"> thêm mới bài
+            đăng</button>
+        <div class="modal fade" id="postForm" %> tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content card-body">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">tạo bài post mới</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form enctype="multipart/form-data" class="form-horizontal forms-sample" method="post"
+                            action=<%=url+"/adminPost" %>>
+                            <div class="form-group">
+                                <label for="username" class="cols-sm-2 control-label">tên địa điểm</label>
+                                <div class="cols-sm-10">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-users fa"
+                                                aria-hidden="true"></i></span>
+                                        <select name="localtionID" class="form-control" id="exampleFormControlSelect1">
+                                            <% location.forEach(function(locationDetail){ %>
+                                            <option value=<%=locationDetail._id %>> <%=locationDetail.nameLocation %>
+                                            </option>
+                                            <%})%>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="name" class="cols-sm-2 control-label">post name</label>
+                                <div class="cols-sm-10">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-user fa"
+                                                aria-hidden="true"></i></span>
+                                        <input type="text" class="form-control" name="name" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="password" class="cols-sm-2 control-label">description</label>
+                                <div class="cols-sm-10">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-lock fa-lg"
+                                                aria-hidden="true"></i></span>
+                                        <input type="text" class="form-control" name="description" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="password" class="cols-sm-2 control-label">content</label>
+                                <div class="cols-sm-10">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-lock fa-lg"
+                                                aria-hidden="true"></i></span>
+                                        <input type="text" class="form-control" name="content" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="password" class="cols-sm-2 control-label">plan</label>
+                                <div class="cols-sm-10">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-lock fa-lg"
+                                                aria-hidden="true"></i></span>
+                                        <input type="text" class="form-control" name="plan" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="password" class="cols-sm-2 control-label">price</label>
+                                <div class="cols-sm-10">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-lock fa-lg"
+                                                aria-hidden="true"></i></span>
+                                        <input type="number" class="form-control" name="price" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="password" class="cols-sm-2 control-label">image</label>
+                                <div class="cols-sm-10">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-lock fa-lg"
+                                                aria-hidden="true"></i></span>
+                                        <input type="file" class="form-control" name="image" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group ">
+                                <button type="submit"
+                                    class="btn btn-primary btn-lg btn-block login-button">post</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">trạng thái</th>
+                <th scope="col">tên bài dăng</th>
+                <th scope="col">vị trí </th>
+                <th scope="col"> nội dung </th>
+                <th scope="col">lộ trình </th>
+                <th scope="col">giá </th>
+                <th scope="col">hình ảnh </th>
+            </tr>
+        </thead>
+        <tbody>
+            <% let i = 0 %>
+            <% post.forEach(function(iteam){ %>
+            <tr>
+
+                <th id="status"><%= iteam.status %></th>
+                <th style="width: 300px;"><textarea name="" id="" cols="20" rows="2"><%= iteam.name; %></textarea></th>
+                <th><%= iteam.localtionID.nameLocation; %></th>
+                <th><%= iteam.content; %></th>
+                <th><%= iteam.plan %></th>
+                <th><%= iteam.price %></th>
+                <th><img src=<%=url+'/'+iteam.image[0]; %> height="200px" width="200px" /></th>
+
+                <th id="data">
+                    <button type="button" class="btn btn-primary" data-target=<%='#haha'+i.toString(); %>
+                        data-toggle="modal">update</button>
+                    <div class="modal fade bd-example-modal-xl" id=<%='haha'+i.toString() %> tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-xl" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Chi tiết bài đăng</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="card-body">
+                                        <h4 class="card-title">Bài đăng </h4>
+                                        <form class="form-sample" enctype="multipart/form-data" method="POST"
+                                            action=<%= url +"/adminPost/update" %>>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 col-form-label"> tên bài đăng </label>
+                                                        <div class="col-sm-9">
+                                                            <textarea type="text" name="name"
+                                                                class="form-control"><%=iteam.name.toString(); %> </textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 col-form-label">Nội dung</label>
+                                                        <div class="col-sm-9">
+                                                            <textarea type="text" name="content"
+                                                                class="form-control"><%= iteam.content; %> </textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 col-form-label">người dẫn tour</label>
+                                                        <div class="col-sm-9">
+                                                            <textarea type="text" name="tourGuideID"
+                                                                class="form-control"
+                                                                readonly><%=iteam.tourGuideID._id;%></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 col-form-label">Địa điểm</label>
+                                                        <div class="col-sm-9">
+                                                            <select class="form-control form-control-lg"
+                                                                name="localtionID">
+                                                                <% location.forEach(function(locationDetail){ %>
+                                                                <option value=<%=locationDetail._id %>>
+                                                                    <%=locationDetail.nameLocation %>
+                                                                </option>
+                                                                <%})%>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 col-form-label">mô tả chuyến đi</label>
+                                                        <div class="col-sm-9">
+                                                            <textarea class="form-control" id="exampleTextarea1"
+                                                                name="description"
+                                                                rows="4"><%= iteam.description; %> </textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 col-form-label">lịch trình chuyến
+                                                            đi</label>
+                                                        <div class="col-sm-9">
+                                                            <textarea class="form-control" id="exampleTextarea1"
+                                                                name="String" rows="4"><%= iteam.plan; %></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 col-form-label">giá của chuyển đi
+                                                        </label>
+                                                        <div class="col-sm-9">
+                                                            <input type="text" class="form-control" name="price"
+                                                                value=<%=iteam.price %>>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 col-form-label"> Trạng thái </label>
+                                                        <div class="col-sm-9">
+                                                            <select class="form-control form-control-lg" name="status">
+                                                                <option value="ACTIVE" selected> ACTIVE </option>
+                                                                <option value="LOCK"> LOCK </option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 col-form-label">hình ảnh</label>
+                                                        <div class="col-sm-9">
+                                                            <input type='file' id="imgInp" name="image" />
+                                                            <img id="blah" src="#" alt="your image" width="200px"
+                                                                height="200px" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div> <input type="hidden" name="_id" value=<%=iteam._id %>> </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-info waves-effect waves-light">cập nhật
+                                        <i class="fas fa-sign-in ml-1"></i>
+                                    </button>
+                                    </form>
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+</div>
+</th>
+</tr>
+<% }) %>
+</tbody>
+</table>
+
+<script>
+    $(document).ready(function () {
+        $('.btn-info-khoa').click(function () {
+            let data = [];
+            const _this = $(this);
+            $(this).closest('tr').find('.body').each(function () {
+                data.push($(this).val())
+            });
+            const body = {
+                _id: data[0],
+                status: 'LOCK'
+            };
+            console.log(body);
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:3000/adminPost/update",
+                data: body,
+                success: function (data) {
+                    console.log(data.status);
+                    // _this.closest('tr').find('#submit').hide();
+                    _this.closest('tr').find('#status').text(data.status);
+                    alert('Success! bạn đã khoa thành công');
+                },
+                error: function (err, message) {
+                    console.log('++++++++++++');
+                    console.log(err.responseJSON.message, "huhuhu", err.responseText, "haha");
+                    alert('text status ' + ', err ' + err.responseJSON.message)
+                }
+            });
+        });
+        $('.btn btn-info-mo').click(function () {
+            let data = [];
+            const _this = $(this);
+            $(this).closest('tr').find('.body').each(function () {
+                data.push($(this).val())
+            });
+            const body = {
+                _id: data[0],
+                status: 'ACTIVE'
+            };
+            console.log(body);
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:3000/adminPost/update",
+                data: body,
+                success: function (data) {
+                    console.log(data.status);
+                    _this.closest('tr').find('#status').text(data.status);
+                    alert('Success! bạn đã chấp nhận tour thành công');
+                },
+                error: function (err, message) {
+                    //show error message
+                    console.log(err.responseJSON.message, "huhuhu", err.responseText, "haha");
+                    alert('text status ' + ', err ' + err.responseJSON.message)
+                }
+            });
+        })
+    })
+</script>

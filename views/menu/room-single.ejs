@@ -1,0 +1,177 @@
+<section class="ftco-section">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8">
+        <div class="row">
+          <div class="col-md-12 ftco-animate fadeInUp ftco-animated">
+            <div class="single-slider owl-carousel owl-loaded owl-drag">
+
+              <div class="owl-stage-outer">
+                <div class="owl-stage"
+                  style="transform: translate3d(-2920px, 0px, 0px); transition: all 0s ease 0s; width: 5110px;">
+                  <div class="owl-item " style="width: 730px;">
+                    <div class="item">
+                      <img src=<%=url+post.image[0] %> alt="1">
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div class="col-md-12 room-single mt-4 mb-5 ftco-animate fadeInUp ftco-animated">
+            <h2 class="mb-4"><%=post.name%> <span>- (<%=post.tourGuideID.username %>)</span></h2>
+            <p><%=post.content%></p>
+            <div class="d-md-flex mt-5 mb-5">
+              <ul class="list">
+                <li><span>địa điểm: </span><%=post.localtionID.nameLocation%> </li>
+                <li><span>kế hoạch: </span><%=post.plan %> </li>
+              </ul>
+              <ul class="list ml-md-5">
+                <li><span>lời khuyên: </span><%=post.description %></li>
+                <li><span>giá tiền : </span><%=post.price+" vnd" %> </li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-md-12 room-single ftco-animate mb-5 mt-4 fadeInUp ftco-animated">
+            <h3 class="mb-4">Xem Nhanh Phòng</h3>
+            <div class="block-16">
+              <figure>
+                <img src="images/room-4.jpg" alt="Image placeholder" class="img-fluid">
+                <a href="https://vimeo.com/45830194" class="play-button popup-vimeo"><span class="icon-play"></span></a>
+              </figure>
+            </div>
+          </div>
+
+          <div class="col-md-12 properties-single ftco-animate mb-5 mt-4 fadeInUp ftco-animated">
+            <h4 class="mb-4">Đánh Giá</h4>
+            <div class="row">
+              <div class="col-md-6">
+                <form method="post" class="star-rating">
+                  <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                    <label class="form-check-label" for="exampleCheck1">
+                      <p class="rate"><span><i class="icon-star"></i><i class="icon-star"></i><i
+                            class="icon-star"></i><i class="icon-star"></i><i class="icon-star"></i> 5 Sao</span></p>
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                    <label class="form-check-label" for="exampleCheck1">
+                      <p class="rate"><span><i class="icon-star"></i><i class="icon-star"></i><i
+                            class="icon-star"></i><i class="icon-star"></i><i class="icon-star-o"></i> 4 Sao</span></p>
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                    <label class="form-check-label" for="exampleCheck1">
+                      <p class="rate"><span><i class="icon-star"></i><i class="icon-star"></i><i
+                            class="icon-star"></i><i class="icon-star-o"></i><i class="icon-star-o"></i> 3 Sao</span>
+                      </p>
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                    <label class="form-check-label" for="exampleCheck1">
+                      <p class="rate"><span><i class="icon-star"></i><i class="icon-star"></i><i
+                            class="icon-star-o"></i><i class="icon-star-o"></i><i class="icon-star-o"></i> 2 Sao</span>
+                      </p>
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                    <label class="form-check-label" for="exampleCheck1">
+                      <p class="rate"><span><i class="icon-star"></i><i class="icon-star-o"></i><i
+                            class="icon-star-o"></i><i class="icon-star-o"></i><i class="icon-star-o"></i> 1 Sao</span>
+                      </p>
+                    </label>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 sidebar ftco-animate fadeInUp ftco-animated">
+        <div class="sidebar-box">
+          <form action="#" class="search-form">
+            <div class="form-group">
+              <span class="icon ion-ios-search"></span>
+              <input type="text" class="form-control" placeholder="Tìm Kiếm...">
+            </div>
+          </form>
+        </div>
+        <div class="sidebar-box ftco-animate fadeInUp ftco-animated">
+          <div class="categories">
+            <h3>Đặt Tour</h3>
+
+            <li>số lượng người đi : <span><input type="number" class="book" id="people" name="NumOfPeople" value=1
+                  placeholder="1"></span></li>
+            <input type="hidden" name="postID" class="book" value=<%=post._id %>>
+            <% if(user != null){ %>
+            <input type="hidden" name="CreateBy" class="book" value=<%=user._id %>>
+            <%}%>
+            <input type="hidden" name="price" class="book" value=<%=post.price %> <li> Giá : <span
+                id="price"><%=post.price %>
+              </span></li>
+            <li> ngày bắt đầu : <span><input class="form-control book" type="date" name="startDay" value="2011-08-19"
+                  id="example-date-input"></span></li>
+
+            <li> ngày kết thúc : <span><input class="form-control book" type="date" name="endDay" value="2011-08-18"
+                  id="example-date-input"></span>
+              <input type="hidden" name="postID" class="book" value=<%=post.tourGuideID._id %>> </li>
+            <button type="button" class="btn btn-info" id="book">Đặt tour</button>
+          </div>
+        </div>
+
+        <div class="sidebar-box ftco-animate fadeInUp ftco-animated">
+          <h3>Ghi Chú</h3>
+          <div class="tagcloud">
+
+            <textarea name="" id="" cols="30" rows="10"></textarea>
+          </div>
+        </div>
+
+        <div class="sidebar-box ftco-animate fadeInUp ftco-animated">
+          <h3>Trích dẫn</h3>
+          <p>Trong cuộc sống có rất nhiều việc bạn không muốn làm nhưng không thể không làm, đây chính là trách nhiệm;
+            trong cuộc sống có rất nhiều việc bạn muốn làm nhưng không thể làm, đây chính là vận mệnh.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    $(document).ready(function () {
+      $('#people').change(function () {
+        let price = $(this).val() + $('#price');
+
+      })
+      $('#book').click(function () {
+        let data = [];
+        $('.book').each(function () {
+          data.push($(this).val());
+        })
+        console.log(data);
+        const body = { postID: data[1], CreateBy: data[2], NumOfPeople: data[0], price: data[3], startDay: data[4], endDay: data[5], tourguider: data[6] }
+        console.log(body);
+        $.ajax({
+          type: "POST",
+          url: "http://localhost:3000/booking",
+          data: body,
+          success: function (data) {
+            //show content
+            console.log(data);
+            alert('Success!', data.mess, data.data)
+          },
+          error: function (err, message) {
+            //show error message
+            console.log(err.responseJSON.message, "huhuhu", err.responseText, "haha");
+            alert('text status ' + ', err ' + err.responseJSON.message)
+          }
+        });
+
+      })
+    });
+  </script>
+</section>

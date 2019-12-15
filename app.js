@@ -1,15 +1,17 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
 const UserRouter = require('./routes/user/user');
 const LocationRouter = require('./routes/admin/location');
 const postRouter = require('./routes/tourguide/post');
 const adminPostRouter = require('./routes/admin/post');
+const userbookingRouter = require('./routes/user/booked');
 var app = express();
 const mongoose = require('mongoose');
 global.WEB_URL = 'http://localhost:3000';
@@ -31,9 +33,11 @@ ConnectMongoDB();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+
+
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: false,defer: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('public',express.static(path.join(__dirname, 'public')));
@@ -44,6 +48,7 @@ app.use('/users', UserRouter.router);
 app.use('/adminlocation', LocationRouter);
 app.use('/post', postRouter);
 app.use('/adminPost',adminPostRouter);
+app.use('/booking',userbookingRouter);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));

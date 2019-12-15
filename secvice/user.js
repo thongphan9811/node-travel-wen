@@ -24,7 +24,8 @@ const update = async function(_id,body){
             }
         }
         const userUpdate = await UserModel.updateOne({_id:UserClass._id},data);
-        return userUpdate;
+        const newUpdate = await UserModel.findOne({_id})
+        return newUpdate;
     }catch(err){
         console.log(err);
         throw new Error(err.message);
@@ -33,16 +34,16 @@ const update = async function(_id,body){
 const AuthUser = async function(email,password){
     try{
         const checkemail = validateEmail(email);
-        if(!checkemail) throw new Error("ban nhap sai form email");
+        if(!checkemail) throw "ban nhap sai form email";
         console.log(email.toString());
         const user = await UserModel.findOne({email:email.toString()});
-        if(!user) throw new Error(" user khong ton tai ");
+        if(!user) throw " user khong ton tai ";
         const checkPass = await bcrypt.compareSync(password, user.password);
-        if(!checkPass) throw new Error ("ban da nhap sai password ");
+        if(!checkPass) throw "ban da nhap sai password ";
         user.password = undefined;    
         return user;
     }catch(err){
-        throw new Error(err.message);
+        throw err;
     }
 }
 const getByID = async function(_id){

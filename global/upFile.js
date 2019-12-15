@@ -10,15 +10,16 @@ const promise1 = function async(req) {
     form.parse(req)
     form.on("fileBegin", function (err, file) {
       file.path = file.path+'.jpg' ;
-      
     })
       .on('file', function (name, file) {
         images.push(file.path.slice(6));
       })
       .on('field', function (name, field) {
+        console.log(body);
         body[name] = field;
       })
       .on('error', function (err) {
+        console.log(err);
         reject(err);
       })
       .on('end', function () {

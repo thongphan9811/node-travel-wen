@@ -1,0 +1,99 @@
+<div>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">trạng thái</th>
+                <th scope="col">tên bài dăng</th>
+                <th scope="col">số người đi </th>
+                <th scope="col">giá tiền </th>
+                <th scope="col">thời gian bắt đầu </th>
+                <th scope="col">thời gian kết thúc </th>
+                <th scope="col">chức nẵng </th>
+            </tr>
+        </thead>
+        <tbody>
+            <% let id=0 %>
+            <% tour.forEach(function(iteam){ %>
+            <tr>
+
+                <th id="status"><%= iteam.status %></th>
+                <th style="width: 300px;"><textarea name="" id="" cols="20"
+                        rows="2"><%= iteam.postID.name; %></textarea></th>
+                <th><%= iteam.NumOfPeople; %></th>
+                <th><%= iteam.price; %></th>
+                <th><%= iteam.startDay.toLocaleDateString("en-US"); %></th>
+                <th><%= iteam.endDay.toLocaleDateString("en-US"); %></th>
+                <%if(iteam.status == 'AWAIT'){ %>
+                <th id="data">
+                    <input type="hidden" class="body" value=<%=user._id %> name="CreateBy">
+                    <input type="hidden" class="body" value=<%=iteam._id %>>
+                    <button type="button" id="submit" class="btn btn-info-huy">hủy</button>
+                    <button type="button" id="submit" class="btn btn-info-chapnhan">chấp nhận</button>
+                </th>
+                <%}%>
+                </tr>
+                <% }) %>
+        </tbody>
+    </table>
+    <script>
+        $(document).ready(function () {
+            $('.btn-info-huy').click(function () {
+                let data = [];
+                const _this  = $(this);
+                $(this).closest('tr').find('.body').each(function () {
+                    data.push($(this).val())
+                });
+                const body = {
+                    tourguider: data[0],
+                    _id: data[1],
+                    status: 'DENY'
+                };
+                console.log(body);
+                $.ajax({
+                    type: "PUT",
+                    url: "http://localhost:3000/booking",
+                    data: body,
+                    success: function (data) {
+                        console.log(data.status);
+                        _this.closest('tr').find('#submit').hide();
+                        _this.closest('tr').find('#status').text(data.status);
+                        alert('Success! bạn đã hủy tour thành công');
+                    },
+                    error: function (err, message) {
+                        //show error message
+                        console.log(err.responseJSON.message, "huhuhu", err.responseText, "haha");
+                        alert('text status ' + ', err ' + err.responseJSON.message)
+                    }
+                });
+            })
+            $('.btn-info-chapnhan').click(function () {
+                let data = [];
+                const _this = $(this);
+                $(this).closest('tr').find('.body').each(function () {
+                    data.push($(this).val())
+                });
+                const body = {
+                    tourguider: data[0],
+                    _id: data[1],
+                    status: 'ACCEPT'
+                };
+                console.log(body);
+                $.ajax({
+                    type: "PUT",
+                    url: "http://localhost:3000/booking",
+                    data: body,
+                    success: function (data) {
+                        console.log(data.status);
+                        _this.closest('tr').find('#submit').hide();
+                        _this.closest('tr').find('#status').text(data.status);
+                        alert('Success! bạn đã chấp nhận tour thành công');
+                    },
+                    error: function (err, message) {
+                        //show error message
+                        console.log(err.responseJSON.message, "huhuhu", err.responseText, "haha");
+                        alert('text status ' + ', err ' + err.responseJSON.message)
+                    }
+                });
+            })
+        })
+    </script>

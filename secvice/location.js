@@ -12,6 +12,7 @@ const created = async function (data) {
 };
 const update = async function(_id,body){
     try{
+        
         const data = {};
         const locationUP = await locationModel.findById(_id);
         if(!locationUP) throw new Error ("khong tim thay location can update");
@@ -20,9 +21,13 @@ const update = async function(_id,body){
                 data[key] = body[key];
             }
         }
-        const locationUpdated = await locationModel.updateOne({_id:locationUP._id},data);
+        console.log(data);
+        locationUP.set(data);
+
+        const locationUpdated = await locationUP.save();
         return locationUpdated;
     }catch(err){
+        console.log(err);
         throw new Error(err.message);
     }
 };
@@ -36,11 +41,11 @@ const getByIdLocation = async function(_id){
 };
 const getAllLocation = async function(){
     try{
-        const allLocation = locationModel.find({isDelete:false});
+        const allLocation = await locationModel.find({isDelete:false});
         return allLocation;
-
     }catch(err){
-        throw new Error(err.message);
+        console.log(err);
+        throw new Error(err);
     }
 };
 module.exports = {created,update,getByIdLocation,getAllLocation};

@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 const LocationModel = require('./location');
 const schema = new Schema({
     tourGuideID : {type: Schema.Types.ObjectId ,ref :'User'},
-    localtionID :{type :Schema.Types.ObjectId ,red: 'Location'},
+    localtionID :{type :Schema.Types.ObjectId ,ref: 'Location'},
     name :{type:String, unique:true,required:true},
     description:String,
     content: String,

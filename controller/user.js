@@ -1,10 +1,12 @@
 const userService = require('../secvice/user');
+const postService = require('../secvice/post');
 const { validateEmail } = require('../hepler/util');
-const userModel = require('../model/User');
+const bcrypt = require('bcrypt');
 const Constant = require('../constants/index');
 const jwt = require('jsonwebtoken');
 const token_key = 'asdasdhs';
 const cookie = require('cookie');
+const postModel = require('../model/post');
 const create = async function (req, res) {
     try {
         res.setHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -74,11 +76,12 @@ const login = async function (req, res) {
 };
 const home = async (req, res, next) => {
     try {
-        let user = req.user;
         if (!req.user) {
-            user = null;
+            req.user = null;
         }
-        return res.render('index', { url: WEB_URL, user: user });
+        const post = await postModel.find({isDelete : false},{},{limit:6})
+        console.log(post);
+        return res.render('index', { url: WEB_URL, user: req.user ,post:post ,view:'menu/body' });
     } catch (err) {
         next(err);
     }
@@ -97,22 +100,35 @@ const update = async (req, res) => {
         const data = req.body;
         const role = req.user.role;
         if (role == 'admin') {
+            if(data.role == 'tourguide'){
+                console.log(data);
+                const findposted = await postService.updateMany(data._id,{status:'LOCK'});
+                console.log(findposted);
+            }
+            if(data.role == 'customer'){
+                // check booked 
+            }
+            if(data.password){
+                const salt = bcrypt.genSaltSync(10);
+                const hash = bcrypt.hashSync(data.password,salt);
+                data.password = hash;
+            }
             const userUpdate = await userService.update(data._id, data);
             return res.redirect('/users/home/qluser');
         } else {
-            const checkUser = await userService.getByID(body._id);
+            const checkUser = await userService.getByID(req.user._id);
             if (checkUser._id.toString() != req.user._id) throw 'canh bao ban dang update user khac';
-            const userUp = await userService.update(data);
-            return res.redirect('/home/qluser');
+            const userUp = await userService.update(req.user._id,data);
+            
+            return res.json({data :userUp ,mess :" thay đổi thành công "});
         }
     } catch (err) {
-        return res.json({ data: err });
+        return res.status(500).json({ data: err });
     }
 }
 const getallUser = async (req, res) => {
     try {
         const user = await userService.getAllUser();
-        console.log('===================',user);
         return res.render('adminhome', { url: WEB_URL, user: user, view: 'admin/tableUser', author: req.user });
     } catch (err) {
         console.log(err);
@@ -129,21 +145,17 @@ const getLoginform = async (req, res) => {
 }
 const logout = async (req, res) => {
     try {
-        res.clearCookie('sessoin-token'); res.redirect('/users/home');
+        res.clearCookie('sessoin-token'); return res.redirect('/users/home');
     } catch (err) {
         return err;
     }
 }
-module.exports = { create, login, home, adminhome, getallUser, update, getLoginform, logout };
+const getProfileForm = async (req,res)=>{
+    try{
+        res.render('index',{user : req.user,view:'menu/profile', url: WEB_URL})
+    }catch(err){
+        return res.json({code:500 , mess :' loi khi lay thong tin ca nhan', data :err});
+    }
+}
+module.exports = { create, login, home, adminhome, getallUser, update, getLoginform, logout,getProfileForm };
 
-{/* <form action="/action_page.php">
-  First name:<br>
-  <input type="text" name="firstname" value="Mickey">
-  <br>
-  Last name:<br>
-  <input type="text" name="lastname" value="Mouse">
-  <br><br>
-  <input type="submit" value="Submit">
-</form>
-
-nhưng dùng <input type="hidden" id="custId" name="custId" value="3487"></input> */}

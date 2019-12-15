@@ -1,12 +1,12 @@
 <div>
     <div>
-        <button type="button" class="btn btn-primary" data-target="#loginFrom" data-toggle="modal">Add New location</button>
+        <button type="button" class="btn btn-primary" data-target="#loginFrom" data-toggle="modal">thêm mới địa điểm</button>
         <div class="modal fade" id="loginFrom" %> tabindex="-1" role="dialog"
             aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Create New User</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">tạo mới địa điểm</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -14,7 +14,7 @@
                     <div class="modal-body">
                         <form class="form-horizontal" method="post" action=<%=url +'/adminlocation' %> >
                             <div class="form-group">
-                                <label for="username" class="cols-sm-2 control-label">Name location</label>
+                                <label for="username" class="cols-sm-2 control-label">tên địa điểm</label>
                                 <div class="cols-sm-10">
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="fa fa-users fa"
@@ -25,7 +25,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                    <label for="name" class="cols-sm-2 control-label">description</label>
+                                    <label for="name" class="cols-sm-2 control-label">mô tả</label>
                                     <div class="cols-sm-10">
                                         <div class="input-group">
                                             <span class="input-group-addon"><i class="fa fa-user fa"
@@ -37,13 +37,9 @@
                             </div>
                             <div class="form-group ">
                                 <button type="submit"
-                                    class="btn btn-primary btn-lg btn-block login-button">Add </button>
-                            </div>
-                            <div class="login-register">
-                                <a href="index.php">Login</a>
-                            </div>
+                                    class="btn btn-primary btn-lg btn-block login-button">thêm </button>
+                            </div>    
                         </form>
-
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -55,9 +51,9 @@
     <table class="table table-hover">
         <thead>
             <tr>
-                <th scope="col">Create By id</th>
-                <th scope="col">name location</th>
-                <th scope="col">description</th>
+                <th scope="col">người tạo địa điểm</th>
+                <th scope="col">tên địa điểm</th>
+                <th scope="col">mô tả địa điểm</th>
             </tr>
         </thead>
         <tbody>
@@ -68,13 +64,13 @@
                 <th><%= locationdetail.description.slice(0, 40)+'....'; %></th>
                 <th>
                     <button type="button" class="btn btn-primary" data-target=<%="#"+locationdetail.nameLocation %>
-                        data-toggle="modal">update</button>
+                        data-toggle="modal">cập nhật</button>
                     <div class="modal fade" id=<%=locationdetail.nameLocation; %> tabindex="-1" role="dialog"
                         aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">detail User</h5>
+                                    <h5 class="modal-title" id="exampleModalLabel">chi tiết địa điểm</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -83,13 +79,13 @@
                                     <form action=<%= url + '/adminlocation/updateLocation'; %> method="post">
                                         <div>
                                             <i class="fas fa-lock prefix"></i>
-                                            <label for="form14" class="">Name location</label>
+                                            <label for="form14" class="">tên địa điểm</label>
                                             <input type="username" name="nameLocation" class="form-control form-control-sm"
                                              value=<%=locationdetail.nameLocation  %> >
                                         </div>
                                         <div>
                                             <i class="fas fa-lock prefix"></i>
-                                            <label for="form5">description</label>
+                                            <label for="form5">mô tả địa điểm</label>
                                             <input type="text" name="description" value=<%=locationdetail.description  %>
                                                 class="form-control form-control-sm">
                                         </div>
@@ -98,7 +94,7 @@
                                             <input type="hidden" name="_id" value=<%=locationdetail._id %> >
                                         </div>
                                         <div>
-                                            <button type="submit" class="btn btn-info waves-effect waves-light">update
+                                            <button type="submit" class="btn btn-info waves-effect waves-light">cập nhật
                                                 <i class="fas fa-sign-in ml-1"></i>
                                             </button>
                                         </div>
@@ -106,7 +102,7 @@
 
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">đóng</button>
                                 </div>
                             </div>
                         </div>
@@ -119,7 +115,7 @@
                             <input type="hidden" name="_id" value=<%=locationdetail._id; %> >
                         </div>
                         <div>
-                            <button type="submit" class="btn btn-primary"> delete </button>
+                            <button type="submit" class="btn btn-primary"> Xóa </button>
                         </div>
                     </form>
                 </th>
