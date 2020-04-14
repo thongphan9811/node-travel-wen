@@ -7,15 +7,12 @@
             <div class="single-slider owl-carousel owl-loaded owl-drag">
 
               <div class="owl-stage-outer">
-                <div class="owl-stage"
-                  style="transform: translate3d(-2920px, 0px, 0px); transition: all 0s ease 0s; width: 5110px;">
+                
                   <div class="owl-item " style="width: 730px;">
-                    <div class="item">
+                    <div class="item owl-item" style="width: 730px;">
                       <img src=<%=url+post.image[0] %> alt="1">
                     </div>
                   </div>
-
-                </div>
               </div>
 
             </div>
@@ -25,21 +22,24 @@
             <p><%=post.content%></p>
             <div class="d-md-flex mt-5 mb-5">
               <ul class="list">
-                <li><span>địa điểm: </span><%=post.localtionID.nameLocation%> </li>
-                <li><span>kế hoạch: </span><%=post.plan %> </li>
-              </ul>
-              <ul class="list ml-md-5">
-                <li><span>lời khuyên: </span><%=post.description %></li>
-                <li><span>giá tiền : </span><%=post.price+" vnd" %> </li>
+                <div>
+                  <li style="font-size: larger;"><b>Địa điểm: </b><%=post.localtionID.nameLocation%> </li>
+                </div>
+                <div>
+                  <textarea id="descriptionHTML" hidden ><%=post.description %></textarea>
+                  <li style="font-size: larger;" ><b>Mô tả: </b><div id="description"></div> </li>
+                </div>
+                <textarea id="planHTML" hidden ><%=post.plan %></textarea>
+                <li style="font-size: larger;" ><b>Kế hoạch: </b> <div id="plan"></div> </li>
+                <li style="font-size: larger;" ><b>Giá tiền : </b><%=post.price%> VNĐ/ người/ ngày </li>
               </ul>
             </div>
           </div>
           <div class="col-md-12 room-single ftco-animate mb-5 mt-4 fadeInUp ftco-animated">
-            <h3 class="mb-4">Xem Nhanh Phòng</h3>
+            <h3 class="mb-4">Xem các hình ảnh về tour</h3>
             <div class="block-16">
               <figure>
                 <img src="images/room-4.jpg" alt="Image placeholder" class="img-fluid">
-                <a href="https://vimeo.com/45830194" class="play-button popup-vimeo"><span class="icon-play"></span></a>
               </figure>
             </div>
           </div>
@@ -106,7 +106,7 @@
           <div class="categories">
             <h3>Đặt Tour</h3>
 
-            <li>số lượng người đi : <span><input type="number" class="book" id="people" name="NumOfPeople" value=1
+            <li >số lượng người đi : &nbsp; <span><input type="number" class="book" id="people" name="NumOfPeople" value=1
                   placeholder="1"></span></li>
             <input type="hidden" name="postID" class="book" value=<%=post._id %>>
             <% if(user != null){ %>
@@ -121,15 +121,17 @@
             <li> ngày kết thúc : <span><input class="form-control book" type="date" name="endDay" value="2011-08-18"
                   id="example-date-input"></span>
               <input type="hidden" name="postID" class="book" value=<%=post.tourGuideID._id %>> </li>
-            <button type="button" class="btn btn-info" id="book">Đặt tour</button>
+
+              <br>
+            <button type="button" class="btn btn-info" id="book">Xác nhận</button>
           </div>
         </div>
-
+        <br>
         <div class="sidebar-box ftco-animate fadeInUp ftco-animated">
           <h3>Ghi Chú</h3>
           <div class="tagcloud">
 
-            <textarea name="" id="" cols="30" rows="10"></textarea>
+            <textarea name="" id="" cols="40" rows="5"></textarea>
           </div>
         </div>
 
@@ -137,6 +139,11 @@
           <h3>Trích dẫn</h3>
           <p>Trong cuộc sống có rất nhiều việc bạn không muốn làm nhưng không thể không làm, đây chính là trách nhiệm;
             trong cuộc sống có rất nhiều việc bạn muốn làm nhưng không thể làm, đây chính là vận mệnh.</p>
+        </div>
+        <div>
+          <b>Bình luận</b>
+          <textarea cols="60" rows="3" placeholder="Hảy để lại bình luận của bạn về bài đăng này" id="comment"></textarea>
+          <button type="button" class="btn btn-info" style="margin-top: 25px;" id="btnComment" >Bình luận</button>
         </div>
       </div>
     </div>
@@ -146,6 +153,31 @@
       $('#people').change(function () {
         let price = $(this).val() + $('#price');
 
+      })
+      $('#plan').html($('#planHTML').val());
+      $('#description').html($('#descriptionHTML').val());
+      $('#btnComment').click(()=>{
+        const formData = new FormData();
+        const comment = $('#comment').val();
+        if(comment === ""){
+          alert('bạn phải nhập nội dung bình luận');
+        }else{
+          formData.append('comment',comment);
+          $.ajax({
+          type: "POST",
+          url: "",
+          data: formData,
+          success: function (data) {
+            console.log(data);
+            alert('bình luận thành công!');
+          },
+          error: function (err, message) {
+            //show error message
+            console.log(err.responseJSON.message, "huhuhu", err.responseText, "haha");
+            alert('text status ' + ', err ' + err.responseJSON.message)
+          }
+        });
+        }
       })
       $('#book').click(function () {
         let data = [];

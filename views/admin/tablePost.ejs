@@ -139,7 +139,7 @@
                 <th><%= item.name; %></th>
                 <th>
                     <button type="button" class="btn btn-primary" data-target=<%='#haha'+i.toString(); %>
-                        data-toggle="modal">update</button>
+                        data-toggle="modal">Duyệt bài đăng</button>
                     <div class="modal fade bd-example-modal-xl" id=<%='haha'+i.toString() %> tabindex="-1" role="dialog"
                         aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-xl" role="document">
@@ -281,7 +281,7 @@
             <input   type="hidden" name="_id" value=<%=item._id %> >
         </div>
         <div>
-            <button type="submit" class="btn btn-primary"> delete </button>
+            <button type="submit" class="btn btn-primary"> Xoá bài đăng </button>
         </div>
     </form>
 </th>
@@ -332,6 +332,5 @@
         $("#imgInp").change(function () {
             readURL(this);
         });
-
     });
 </script>

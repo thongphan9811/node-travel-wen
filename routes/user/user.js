@@ -17,5 +17,4 @@ router.get('/admin',midleware.authAdmin,UserController.adminhome);
 router.post('/home/qluser',midleware.authUsers,UserController.update);
 
 
-
 module.exports = { router, token_key }

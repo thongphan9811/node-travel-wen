@@ -2,28 +2,22 @@ const userService = require('../secvice/user');
 const postService = require('../secvice/post');
 const { validateEmail } = require('../hepler/util');
 const bcrypt = require('bcrypt');
-const Constant = require('../constants/index');
 const jwt = require('jsonwebtoken');
 const token_key = 'asdasdhs';
 const cookie = require('cookie');
 const postModel = require('../model/post');
 const create = async function (req, res) {
     try {
-        res.setHeader('Content-Type', 'application/x-www-form-urlencoded');
         const body = req.body;
-        let role = null
-        console.log(body.role);
-        if (body.role.toLowerCase() == 'admin') role = Constant.ROLE.ADMIN;
-        if (body.role.toLowerCase() == 'customer') role = Constant.ROLE.CUSTOMER;
-        if (body.role.toLowerCase() == 'tourguide') role = Constant.ROLE.TOURGUIDE;
-        if (body.role == null) role = Constant.ROLE.CUSTOMER;
-        body.role = role;
         const err = validateUser(body);
         if (err) {
-            throw err.message;
+            throw err;
         };
         const user = await userService.create(body);
-        if (req.user.role == 'admin') return res.redirect('/users/home/qluser');
+        if (req.user.role === 'admin') return res.redirect('/users/home/qluser');
+        else{
+            return res.json(user);
+        }
     } catch (err) {
         console.log(err);
         return res.json({ code: 400, mess: "dang ki that bai", data: err.message });
@@ -45,6 +39,7 @@ const validateUser = function (body) {
     //         data[key] = body[key];
     //     }
     // 
+    
     return err
 }
 
@@ -79,7 +74,7 @@ const home = async (req, res, next) => {
         if (!req.user) {
             req.user = null;
         }
-        const post = await postModel.find({isDelete : false},{},{limit:6})
+        const post = await postModel.find({isDelete : false,status:'ACTIVE'},{},{limit:6})
         console.log(post);
         return res.render('index', { url: WEB_URL, user: req.user ,post:post ,view:'menu/body' });
     } catch (err) {
@@ -152,7 +147,8 @@ const logout = async (req, res) => {
 }
 const getProfileForm = async (req,res)=>{
     try{
-        res.render('index',{user : req.user,view:'menu/profile', url: WEB_URL})
+        const user = await userService.getByID(req.user._id);
+        res.render('index',{user : user ,view:'menu/profile', url: WEB_URL})
     }catch(err){
         return res.json({code:500 , mess :' loi khi lay thong tin ca nhan', data :err});
     }

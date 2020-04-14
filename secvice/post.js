@@ -5,7 +5,8 @@ const create = async function (body) {
         const post = await postClass.save();
         return post;
     } catch (err) {
-        throw new Error(err.message);
+        console.log(err);
+        throw Error(err);
     };
 };
 const updateMany = async (_id, body) => {
@@ -20,10 +21,6 @@ const update = async function (user, _id, body) {
     try {
         const postQuery = await postModel.findById({ _id });
         if (!postQuery) throw new Error('khong co bai viet can update');
-        if (body.image.length == 0) {
-            body.image.length = null;
-            console.log(body.image.length);
-        }
         if (user.role == 'customer') {
             throw new Error('ban khong co quyen sua bai viet nay admin')
         } else {

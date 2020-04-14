@@ -1,0 +1,187 @@
+<hr style="margin-left: auto;
+margin-right: auto;margin-top: 0.5em;
+  margin-bottom: 0.5em;border-width: 3px; "> 
+<div>
+    <div>
+        <div class="form-group row" style="margin-top:30px">
+            <label for="full_name" class="col-md-4 col-form-label text-md-right" style="padding-left: 100px; font-size:x-large;">Tên tour : </label>
+            <div class="col-md-6">
+                <textarea hidden id="valueName" ><%=post.name%> </textarea>
+                <input  type="text"  class="form-control submit" style="height: 50px;" id="name" >
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="full_name" class="col-md-4 col-form-label text-md-right" style="padding-left: 100px; font-size:x-large;"> Tên địa điểm : </label>
+            <div class="col-md-6">
+                <select id="localtionID" class="form-control selectpicker show-menu-arrow" style=" font-size: large; height: 50px; " id="exampleFormControlSelect1">
+                    <% location.forEach(function(locationDetail){ %>
+                    <option  value=<%=locationDetail._id %>> <%=locationDetail.nameLocation %>
+                    </option>
+                    <%})%>
+                </select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="full_name" class="col-md-4 col-form-label text-md-right" style="padding-left: 100px; font-size:x-large;"> Mô tả : </label>
+            <div class="col-md-6">
+                <textarea hidden id="valueDescription" ><%=post.description %> </textarea>
+                <div class="summernote" id="description" style="margin-left: 5px;" ></div>
+                <button class="btn btn-primary" id="editDescription" > chỉnh sửa </button>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="full_name" class="col-md-4 col-form-label text-md-right" style="padding-left: 100px; font-size:x-large;"> Kế hoạch tour : </label>
+            <div class="col-md-6">
+                <textarea hidden id="valuePlan" ><%=post.plan %> </textarea>
+                <div class="summernote" id="plan" style="margin-left: 5px;" ></div>
+                <button class="btn btn-primary" id="editPlan" > chỉnh sửa </button>
+            </div>
+        </div>
+        <div class="form-group row" style="margin-top:30px">
+            <label for="full_name" class="col-md-4 col-form-label text-md-right" style="padding-left: 100px; font-size:x-large;"> Giá chuyến đi : </label>
+            <div class="col-md-6">
+                <input  type="text" id="price" class="form-control submit" style="height: 50px;" placeholder="VND/người/ngày" value=<%=post.price %> >
+            </div>
+        </div>
+            <div id="slider">
+                <figure>
+                    <%post.thumb_img.forEach(element =>{ %>
+                        <img src=<%=element %> > 
+                    <% })%>
+                </figure>
+                <button class="btn-prev"><i class="fa fa-arrow-circle-left"></i> </button>
+                <button class="btn-next"><i class="fa fa-arrow-circle-right"></i> </button>
+            </div>
+        <div class="form-group row" style="margin-top:30px">
+            <label for="full_name" class="col-md-4 col-form-label text-md-right" style="padding-left: 100px; font-size:x-large;"> Hình ảnh về tour : </label>
+            <div class="col-md-6">
+                <input type="file" id="image" name="files" multiple style="margin-top: 10px;">
+            </div>
+            <input hidden id="_id" value=<%=post._id %> >
+        </div>
+        <a hidden href="http://localhost:3000/adminPost/myPost" id="myPost"></a>
+        <button id="submit" class="btn btn-primary" style="margin-left: 1100px; font-size: 20px; margin-bottom: 20px;">chỉnh sửa bài viết</button>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        var x = 0;
+    // for next slide
+		$('.btn-next').click(function(){
+    
+        x= (x<=300)?(x+100):0;
+      $('figure').css('left', -x+'%');
+		});
+     // for prev slide
+     $('.btn-prev').click(function(){
+    
+        x= (x>=100)?(x-100):400;
+      $('figure').css('left', -x+'%');
+    });
+    
+        $('#editDescription').click(()=>{
+            $('#description').summernote({focus: true});
+        })
+        $('#editPlan').click(()=>{
+            $('#plan').summernote({focus: true});
+        })
+        var save = function(id) {
+            var markup = $(id).summernote('code');
+            $(id).summernote('destroy');
+        };
+        const validateNumber = (input)=>{
+        const data = parseFloat(input);
+        if(isNaN(data)){
+             alert('Vui lòng nhập số cho giá tiền ');
+             return ;
+        }
+            return data
+        }
+        const name = $('#valueName').val();
+        $('#name').val(name);
+        const description = $('#valueDescription').val();
+        $('#description').html(description);
+        $('#plan').html($('#valuePlan').val());
+        $('#submit').click( async()=>{
+            const price = await validateNumber($('#price').val());
+            const name = $('#name').val();
+            const localtionID = $('#localtionID').val();
+            const description = $('#description').summernote('code');
+            const plan = $('#plan').summernote('code');
+            const _id = $('#_id').val();
+            let formData = new FormData();
+            jQuery.each(jQuery('#image')[0].files, function(i, file) {
+                formData.append('image', file);
+            });
+            const body = {
+                name ,localtionID ,description,plan,price,_id
+            }
+                formData.append('_id',body._id);
+                 formData.append('name',body.name);
+                 formData.append('localtionID',body.localtionID);
+                 formData.append('description',body.description);
+                 formData.append('plan',body.plan);
+                 formData.append('price',body.price);
+                $.ajax({
+                    type: "POST",
+                    url: "http://localhost:3000/adminPost/update",
+                    data: formData,
+                    contentType: false, 
+                    processData: false,
+                    success: function (data) {
+                        console.log(data,"hâhha");
+                        alert(' bạn đã update thành công');
+                        window.location.replace("http://localhost:3000/adminPost/myPost");
+                    },
+                    error: function (err, message) {
+                        console.log(err , message) ;
+                        alert('text status ' + ', err ' + err.responseJSON.message)
+                    }
+                });
+        })
+    })
+</script>
+<style>
+
+
+    #slider{
+        width: 400px;
+        height: 400px;
+        margin:50px auto;
+        box-shadow: 0px 0px 10px 3px grey;
+        position: relative;
+    }
+    
+    
+    div#slider { overflow: hidden; border: 5px solid #3949ab; }
+    div#slider figure img { width: 20%; height:100%;  float: left; }
+    div#slider figure { 
+        position: relative;
+      width: 500%;
+      margin: 0;
+      left: 0;
+      transition: 1s ease-in-out;
+      
+     
+    }
+        
+        .btn-next, .btn-prev{
+          position: absolute;
+          top: 45%;
+          cursor: pointer;
+          color: white;
+          background: #3949ab;
+          padding: 20px;
+          font-size: 20px;
+          border:none;
+        }
+        
+        .btn-prev{
+          left: 0px;
+        }
+        .btn-next{
+          right: 0px;
+        }
+        
+        
+        </style>
