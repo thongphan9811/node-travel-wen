@@ -7,9 +7,10 @@ const create = async (req, res,next) => {
         const err = validation(body);
         if (err) throw err;
         body.NumOfPeople = parseInt(req.body.NumOfPeople);
-        body.price = body.NumOfPeople * body.price;
         body.startDay = new Date(body.startDay);
         body.endDay = new Date(body.endDay);
+        const date =body.endDay - body.startDay;
+        body.price = (date/(24*60*60*1000)) * body.NumOfPeople *body.price;
         if(body.startDay < new Date() ) throw ' bạn đã đặt ngày bắt đầu nhỏ hơn ngày hiện tại';
         if (body.startDay > body.endDay) throw 'ngay kết thúc bé hơn ngày bắt đầu ';
         const checkbooking = await bookService.getByCustomerID(req.user._id);
@@ -25,7 +26,6 @@ const create = async (req, res,next) => {
         const booking = await bookService.create(body);
         return res.json({code :200 , mess :'dat tour thanh cong ', data: booking});
     } catch (err) {
-        console.log("lõi")
         console.log(err);
         let httpError = createError(500,err);
         

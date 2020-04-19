@@ -6,6 +6,8 @@ const jwt = require('jsonwebtoken');
 const token_key = 'asdasdhs';
 const cookie = require('cookie');
 const postModel = require('../model/post');
+const createError = require('http-errors');
+var _ = require('lodash');
 const create = async function (req, res) {
     try {
         const body = req.body;
@@ -19,8 +21,8 @@ const create = async function (req, res) {
             return res.json(user);
         }
     } catch (err) {
-        console.log(err);
-        return res.json({ code: 400, mess: "dang ki that bai", data: err.message });
+        const message = _.isString(err) ? err : err.message;
+        return res.status(400).json(createError.BadRequest(message));
     }
 }
 
@@ -30,16 +32,7 @@ const validateUser = function (body) {
     if (!body.username) err = 'ban chua nhap name';
     if (!body.email || !validateEmail(body.email)) err = 'ban can nhap lai email dung';
     if (!body.phone) err = 'ban can nhap sdt';
-    //if (!body.birthDay) err = 'ban can nhap ';
-    if (!body.password) err = 'ban can nhap pass word';
-    // if(body.phone)
-    // if (!err) {
-    //     for (var key in userModel);
-    //     if (body[key]) {
-    //         data[key] = body[key];
-    //     }
-    // 
-    
+    if (!body.password) err = 'ban can nhap password';
     return err
 }
 
@@ -57,16 +50,10 @@ const login = async function (req, res) {
             path: '/',
             maxAge: 60 * 60 * 24 * 7 // 1 week
         }))
-        if (user.role == "customer" || user.role == 'tourguide')
-            return res.redirect('/users/home');
-        if (user.role = 'admin') {
-            return res.redirect('/users/admin');
-        };
+        return res.json(user);
     } catch (err) {
-        console.log(err);
-        return res.json({
-            code: 400, mess: "dang nhap khong thanh cong", data: err.message
-        });
+        const message = _.isString(err) ? err : err.message;
+        return res.status(400).json(createError.BadRequest(message));
     }
 };
 const home = async (req, res, next) => {
@@ -153,5 +140,12 @@ const getProfileForm = async (req,res)=>{
         return res.json({code:500 , mess :' loi khi lay thong tin ca nhan', data :err});
     }
 }
-module.exports = { create, login, home, adminhome, getallUser, update, getLoginform, logout,getProfileForm };
+const getPageRegister = async (req,res)=>{
+    try{
+        return res.render('register',{ url: WEB_URL});
+    }catch(err){
+
+    }
+}
+module.exports = { create, login, home, adminhome, getallUser, update, getLoginform, logout,getProfileForm ,getPageRegister };
 

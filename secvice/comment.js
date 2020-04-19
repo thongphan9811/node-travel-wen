@@ -9,5 +9,12 @@ const create = async(body)=>{
         throw Error(err);
     }
 }
-
-module.exports = { create};
+const getAllCommentPost = async(postID)=>{
+    try{
+        const arrComment = await commentModel.find({postID}).populate('commentBy');
+        return arrComment;
+    }catch(err){
+        throw Error(err);
+    }
+}
+module.exports = { create,getAllCommentPost};

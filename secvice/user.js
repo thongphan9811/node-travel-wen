@@ -5,7 +5,6 @@ const create = async function(data){
     try{
         const UserClass = new UserModel(data);
         const user= await UserClass.save();
-        //if(err) console.log(err)
         return user;
     }catch(err){
         throw new Error(err);

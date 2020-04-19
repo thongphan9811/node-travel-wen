@@ -11,6 +11,8 @@ const UserRouter = require('./routes/user/user');
 const LocationRouter = require('./routes/admin/location');
 const adminPostRouter = require('./routes/admin/post');
 const userbookingRouter = require('./routes/user/booked');
+const commentRouter = require('./routes/user/comment');
+const rateRoute = require('./routes/user/rate');
 var app = express();
 const mongoose = require('mongoose');
 global.WEB_URL = 'http://localhost:3000' ;
@@ -46,6 +48,8 @@ app.use('/users', UserRouter.router);
 app.use('/adminlocation', LocationRouter);
 app.use('/adminPost',adminPostRouter);
 app.use('/booking',userbookingRouter);
+app.use('/comment',commentRouter);
+app.use('/rate',rateRoute);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));

@@ -3,6 +3,8 @@ const upfile = require('../global/upFile');
 const userService = require('../secvice/user');
 const locationService = require('../secvice/location');
 const createError = require('http-errors');
+const commentService = require('../secvice/comment');
+const rateService = require('../secvice/rate');
 var _ = require('lodash');
 const create = async (req, res) => {
     try {
@@ -54,9 +56,9 @@ const getdettail = async (req,res)=>{
     try{
         const postID = req.params._postID;
         const post = await postService.getByID(postID);
-        console.log(post);
-        
-        res.render('index',{user:req.user  ,url : WEB_URL ,view:'menu/room-single' ,post ,user:req.user});
+        const comment = await commentService.getAllCommentPost(postID);
+        const rateAVG = await rateService.average(postID);
+        res.render('index',{user:req.user  ,url : WEB_URL ,view:'menu/room-single' ,post ,user:req.user,comment ,rateAVG});
     }catch(err){
         return res.json({ code :400 ,mess :"co loi khi get detail post" ,data :err});
     }
