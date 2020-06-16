@@ -1,5 +1,5 @@
 const bookModel = require('../model/booked');
-
+var createError = require('http-errors')
 const create = async (data)=>{
     try{
         const bookClass = new bookModel(data);
@@ -20,6 +20,12 @@ const update = async (IdUser,_id,data)=>{
     }catch(err){
         throw err;
     }
+}
+const updateAdmin = async (_id,data)=>{
+    const booking = await bookModel.findById(_id);
+    booking.set(data);
+    const result = await await booking.save();
+    return result ; 
 }
 const updateTourguide = async (tourguiderId,_id,data)=>{
     try{
@@ -62,4 +68,9 @@ const gellAllTour = async (tourguiderId)=>{
         throw err;
     }
 }
-module.exports = {create,getByCustomerID,getAllcustomer,update,getById,gellAllTour,updateTourguide};
+const getTourByAdmin = async ()=>{
+    const arrTour = await bookModel.find().populate('postID').populate('tourguider').populate('CreateBy');
+    return arrTour;
+}
+
+module.exports = {create,getByCustomerID,getAllcustomer,update,getById,gellAllTour,updateTourguide ,getTourByAdmin,updateAdmin};

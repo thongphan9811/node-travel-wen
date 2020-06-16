@@ -17,7 +17,18 @@ const create = async (body)=>{
 };
 const average = async (postID) =>{
     const ratePost = await rateModel.find({postID});
-    const avgRate = ratePost.reduce((accumulator, currentValue) => accumulator.rate + currentValue.rate)/ratePost.length;
-    return avgRate;
+    if(ratePost.length > 0){
+        const avgRate = ratePost.reduce((accumulator, currentValue) => accumulator.rate + currentValue.rate)/ratePost.length;
+        return avgRate;
+    }
+    return 0;
 }
-module.exports= {create, average };
+const find = async = async ()=>{
+    const arrRate = await rateModel.find().populate('postID');
+    const result = arrRate.map( (rate)=>{
+        return average(rate.postID._id);
+    });
+    await Promise.all(result);
+    return result ;
+}
+module.exports= {create, average,find };

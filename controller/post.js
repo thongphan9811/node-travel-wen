@@ -60,6 +60,7 @@ const getdettail = async (req,res)=>{
         const rateAVG = await rateService.average(postID);
         res.render('index',{user:req.user  ,url : WEB_URL ,view:'menu/room-single' ,post ,user:req.user,comment ,rateAVG});
     }catch(err){
+        console.log(err);
         return res.json({ code :400 ,mess :"co loi khi get detail post" ,data :err});
     }
 }

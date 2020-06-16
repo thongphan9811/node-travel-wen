@@ -75,4 +75,25 @@ const update = async (req,res)=>{
         res.status(500).json(createError(500,err));
     }
 }
-module.exports = {create,getAll,update,tourguideGetAll}
+const adminGetBooked = async (req,res)=>{
+    try{
+        const arrBooked = await bookService.getTourByAdmin();
+        console.log(arrBooked);
+        return res.render('adminhome', { url: WEB_URL, arrBooked, view: 'admin/tableBook', author: req.user })
+    }catch(err){
+        return res.status(400).json(createError.BadRequest(err))
+    }
+}
+const adminUpdateBook = async (req,res)=>{
+    try{
+        const {_id } = req.body;
+        console.log(req.body);
+        const data = req.body;
+        const result = await bookService.updateAdmin(_id,data);
+        return res.redirect('/adminBook');
+    }catch(err){
+        console.log(err);
+        return res.status(400).json(createError.BadRequest(err));
+    }
+}
+module.exports = {create,getAll,update,tourguideGetAll ,adminGetBooked , adminUpdateBook}

@@ -20,4 +20,13 @@ const validateBody = (body)=>{
     if(!body.rate) return err = 'mời nhập số sao rate';
     return err
 }
-module.exports = {create};
+const manager = async (req,res)=>{
+    try{
+        const result = await rateService.find();
+        console.log(result);
+    }catch{
+        const message = _.isString(err) ? err : err.message;
+        return res.status(400).json(createError.BadRequest(message));
+    }
+}
+module.exports = {create,manager};

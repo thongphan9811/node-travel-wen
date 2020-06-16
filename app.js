@@ -13,6 +13,8 @@ const adminPostRouter = require('./routes/admin/post');
 const userbookingRouter = require('./routes/user/booked');
 const commentRouter = require('./routes/user/comment');
 const rateRoute = require('./routes/user/rate');
+const managerbookRoute = require('./routes/admin/book');
+const adminRating = require('./routes/admin/Rating');
 var app = express();
 const mongoose = require('mongoose');
 global.WEB_URL = 'http://localhost:3000' ;
@@ -50,6 +52,8 @@ app.use('/adminPost',adminPostRouter);
 app.use('/booking',userbookingRouter);
 app.use('/comment',commentRouter);
 app.use('/rate',rateRoute);
+app.use('/adminBook',managerbookRoute);
+app.use('/adminRating',adminRating);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
