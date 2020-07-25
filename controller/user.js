@@ -2,31 +2,27 @@ const userService = require('../secvice/user');
 const postService = require('../secvice/post');
 const { validateEmail } = require('../hepler/util');
 const bcrypt = require('bcrypt');
-const Constant = require('../constants/index');
 const jwt = require('jsonwebtoken');
 const token_key = 'asdasdhs';
 const cookie = require('cookie');
 const postModel = require('../model/post');
+const createError = require('http-errors');
+var _ = require('lodash');
 const create = async function (req, res) {
     try {
-        res.setHeader('Content-Type', 'application/x-www-form-urlencoded');
         const body = req.body;
-        let role = null
-        console.log(body.role);
-        if (body.role.toLowerCase() == 'admin') role = Constant.ROLE.ADMIN;
-        if (body.role.toLowerCase() == 'customer') role = Constant.ROLE.CUSTOMER;
-        if (body.role.toLowerCase() == 'tourguide') role = Constant.ROLE.TOURGUIDE;
-        if (body.role == null) role = Constant.ROLE.CUSTOMER;
-        body.role = role;
         const err = validateUser(body);
         if (err) {
-            throw err.message;
+            throw err;
         };
         const user = await userService.create(body);
-        if (req.user.role == 'admin') return res.redirect('/users/home/qluser');
+        if (req.user.role === 'admin') return res.redirect('/users/home/qluser');
+        else{
+            return res.json(user);
+        }
     } catch (err) {
-        console.log(err);
-        return res.json({ code: 400, mess: "dang ki that bai", data: err.message });
+        const message = _.isString(err) ? err : err.message;
+        return res.status(400).json(createError.BadRequest(message));
     }
 }
 
@@ -36,15 +32,7 @@ const validateUser = function (body) {
     if (!body.username) err = 'ban chua nhap name';
     if (!body.email || !validateEmail(body.email)) err = 'ban can nhap lai email dung';
     if (!body.phone) err = 'ban can nhap sdt';
-    //if (!body.birthDay) err = 'ban can nhap ';
-    if (!body.password) err = 'ban can nhap pass word';
-    // if(body.phone)
-    // if (!err) {
-    //     for (var key in userModel);
-    //     if (body[key]) {
-    //         data[key] = body[key];
-    //     }
-    // 
+    if (!body.password) err = 'ban can nhap password';
     return err
 }
 
@@ -62,16 +50,10 @@ const login = async function (req, res) {
             path: '/',
             maxAge: 60 * 60 * 24 * 7 // 1 week
         }))
-        if (user.role == "customer" || user.role == 'tourguide')
-            return res.redirect('/users/home');
-        if (user.role = 'admin') {
-            return res.redirect('/users/admin');
-        };
+        return res.json(user);
     } catch (err) {
-        console.log(err);
-        return res.json({
-            code: 400, mess: "dang nhap khong thanh cong", data: err.message
-        });
+        const message = _.isString(err) ? err : err.message;
+        return res.status(400).json(createError.BadRequest(message));
     }
 };
 const home = async (req, res, next) => {
@@ -79,7 +61,7 @@ const home = async (req, res, next) => {
         if (!req.user) {
             req.user = null;
         }
-        const post = await postModel.find({isDelete : false},{},{limit:6})
+        const post = await postModel.find({isDelete : false,status:'ACTIVE'},{},{limit:6})
         console.log(post);
         return res.render('index', { url: WEB_URL, user: req.user ,post:post ,view:'menu/body' });
     } catch (err) {
@@ -152,10 +134,18 @@ const logout = async (req, res) => {
 }
 const getProfileForm = async (req,res)=>{
     try{
-        res.render('index',{user : req.user,view:'menu/profile', url: WEB_URL})
+        const user = await userService.getByID(req.user._id);
+        res.render('index',{user : user ,view:'menu/profile', url: WEB_URL})
     }catch(err){
         return res.json({code:500 , mess :' loi khi lay thong tin ca nhan', data :err});
     }
 }
-module.exports = { create, login, home, adminhome, getallUser, update, getLoginform, logout,getProfileForm };
+const getPageRegister = async (req,res)=>{
+    try{
+        return res.render('register',{ url: WEB_URL});
+    }catch(err){
+
+    }
+}
+module.exports = { create, login, home, adminhome, getallUser, update, getLoginform, logout,getProfileForm ,getPageRegister };
 

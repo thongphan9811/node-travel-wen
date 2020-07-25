@@ -1,0 +1,40 @@
+<div>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">bài đăng </th>
+                <th scope="col">người dẫn tour</th>
+                <th scope="col">trạng thái</th>
+                <th scope="col">giá tiền </th>
+                <th scope="col"> số lượng đánh giá </th>
+                <th scope="col"> đánh giá trung bình </th>
+                <th scope="col">trạng thái </th>
+            </tr>
+        </thead>
+        <!-- <tbody>
+            <% arrBooked.forEach(function(book){ %>
+            <tr>
+                <th><%= book.postID.name ;%></th>
+                <th><%= book.tourguider.username ; %></th>
+                <th><%= book.CreateBy.username %></th>
+                <th><%= book.NumOfPeople ; %></th>
+                <th><%= book.status ; %></th>
+                <th><%= book.price ; %></th>
+                <th><%= book.startDay.toString().slice(0,15) ; %></th>
+                <th><%= book.endDay.toString().slice(0,15) ; %></th>
+                <th>
+                    <form action=<%=url +'/adminBook' %> method="post">
+                        <div>
+                            <input type="hidden" name="isDelete" value="true">
+                            <input type="hidden" name="status" value="INVALID">
+                            <input type="hidden" name="_id" value=<%=book._id %> >
+                        </div>
+                        <div>
+                            <button type="submit" class="btn btn-primary"> Xóa </button>
+                        </div>
+                    </form>
+                </th>
+            </tr>
+            <% }) %>
+        </tbody> -->
+    </table>

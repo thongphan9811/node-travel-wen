@@ -9,16 +9,18 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const UserRouter = require('./routes/user/user');
 const LocationRouter = require('./routes/admin/location');
-const postRouter = require('./routes/tourguide/post');
 const adminPostRouter = require('./routes/admin/post');
 const userbookingRouter = require('./routes/user/booked');
+const commentRouter = require('./routes/user/comment');
+const rateRoute = require('./routes/user/rate');
+const managerbookRoute = require('./routes/admin/book');
+const adminRating = require('./routes/admin/Rating');
 var app = express();
 const mongoose = require('mongoose');
-global.WEB_URL = 'http://localhost:3000';
+global.WEB_URL = 'http://localhost:3000' ;
 
 const ConnectMongoDB = async () => {
   try {
-
     mongoose.connect('mongodb://localhost:27017/travel-nodejs', { useNewUrlParser: true, useUnifiedTopology: true });
     mongoose.set('useNewUrlParser', true);
     mongoose.set('useFindAndModify', false);
@@ -46,9 +48,12 @@ app.use('/', indexRouter);
 //app.use('/users', usersRouter);
 app.use('/users', UserRouter.router);
 app.use('/adminlocation', LocationRouter);
-app.use('/post', postRouter);
 app.use('/adminPost',adminPostRouter);
 app.use('/booking',userbookingRouter);
+app.use('/comment',commentRouter);
+app.use('/rate',rateRoute);
+app.use('/adminBook',managerbookRoute);
+app.use('/adminRating',adminRating);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));

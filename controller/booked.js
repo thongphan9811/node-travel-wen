@@ -7,9 +7,10 @@ const create = async (req, res,next) => {
         const err = validation(body);
         if (err) throw err;
         body.NumOfPeople = parseInt(req.body.NumOfPeople);
-        body.price = body.NumOfPeople * body.price;
         body.startDay = new Date(body.startDay);
         body.endDay = new Date(body.endDay);
+        const date =body.endDay - body.startDay;
+        body.price = (date/(24*60*60*1000)) * body.NumOfPeople *body.price;
         if(body.startDay < new Date() ) throw ' bạn đã đặt ngày bắt đầu nhỏ hơn ngày hiện tại';
         if (body.startDay > body.endDay) throw 'ngay kết thúc bé hơn ngày bắt đầu ';
         const checkbooking = await bookService.getByCustomerID(req.user._id);
@@ -25,7 +26,6 @@ const create = async (req, res,next) => {
         const booking = await bookService.create(body);
         return res.json({code :200 , mess :'dat tour thanh cong ', data: booking});
     } catch (err) {
-        console.log("lõi")
         console.log(err);
         let httpError = createError(500,err);
         
@@ -75,4 +75,25 @@ const update = async (req,res)=>{
         res.status(500).json(createError(500,err));
     }
 }
-module.exports = {create,getAll,update,tourguideGetAll}
+const adminGetBooked = async (req,res)=>{
+    try{
+        const arrBooked = await bookService.getTourByAdmin();
+        console.log(arrBooked);
+        return res.render('adminhome', { url: WEB_URL, arrBooked, view: 'admin/tableBook', author: req.user })
+    }catch(err){
+        return res.status(400).json(createError.BadRequest(err))
+    }
+}
+const adminUpdateBook = async (req,res)=>{
+    try{
+        const {_id } = req.body;
+        console.log(req.body);
+        const data = req.body;
+        const result = await bookService.updateAdmin(_id,data);
+        return res.redirect('/adminBook');
+    }catch(err){
+        console.log(err);
+        return res.status(400).json(createError.BadRequest(err));
+    }
+}
+module.exports = {create,getAll,update,tourguideGetAll ,adminGetBooked , adminUpdateBook}

@@ -118,31 +118,29 @@ margin-left: 4px;
 				</div>
 			</div>
 			<div class="card-body">
-				<form action=<%= url + '/users/login'; %> method="post">
 					<div class="input-group form-group">
 						<div class="input-group-prepend">
 							<span class="input-group-text"><i class="fas fa-user"></i></span>
 						</div>
-						<input type="text" class="form-control" name="email" >
+						<input type="text" class="form-control" id="email" >
 						
 					</div>
 					<div class="input-group form-group">
 						<div class="input-group-prepend">
 							<span class="input-group-text"><i class="fas fa-key"></i></span>
 						</div>
-						<input type="password" class="form-control" name="password">
+						<input type="password" class="form-control" id="password">
 					</div>
 					<div class="row align-items-center remember">
 						<input type="checkbox">Remember Me
 					</div>
 					<div class="form-group">
-						<input type="submit" value="Login" class="btn float-right login_btn">
+						<input type="submit" id="Login" class="btn float-right login_btn">
 					</div>
-				</form>
 			</div>
 			<div class="card-footer">
 				<div class="d-flex justify-content-center links">
-					Don't have an account?<a href="#">Sign Up</a>
+					Don't have an account?<a href=<%=url + "/users/register" %> >Sign Up</a>
 				</div>
 				<div class="d-flex justify-content-center">
 					<a href="#">Forgot your password?</a>
@@ -152,5 +150,38 @@ margin-left: 4px;
 	</div>
 </div>
 </body>
+<script>
+	$(document).ready(function () {
+		$('#Login').click(()=>{
+			const email = $('#email').val();
+			const password = $('#password').val();
+			console.log(email,password);
+			if(!email || !password){
+				alert('bạn cần nhập username hoặc password');
+			}
+			if(email && password){
+				const body = { email, password };
+				$.ajax({
+          		type: "POST",
+          		url: "http://localhost:3000/users/login",
+          		data: body,
+          		success: function (data) {
+            	 const user = JSON.parse(data);
+				if(user.role === "admin"){
+					window.location.replace("http://localhost:3000/users/admin");
+				}else{
+					window.location.replace("http://localhost:3000/users/home");
+				}
+          		},
+          		error: function (err, message) {
+				const errMess = JSON.parse(err.responseText);
+            		alert(errMess.message);
+          			}
+        		});
+			}
+		})
+	})
+</script>
 </html>
+
 <!-- https://bootsnipp.com/snippets/vl4R7 -->

@@ -1,0 +1,116 @@
+<hr style="margin-left: auto;
+margin-right: auto;margin-top: 0.5em;
+  margin-bottom: 0.5em;border-width: 3px; "> 
+<div>
+    <div>
+        <div class="form-group row" style="margin-top:30px">
+            <label for="full_name" class="col-md-4 col-form-label text-md-right" style="padding-left: 100px; font-size:x-large;">Tên tour : </label>
+            <div class="col-md-6">
+                <input  type="text"  class="form-control submit" style="height: 50px;" id="name" >
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="full_name" class="col-md-4 col-form-label text-md-right" style="padding-left: 100px; font-size:x-large;"> Tên địa điểm : </label>
+            <div class="col-md-6">
+                <select id="localtionID" class="form-control selectpicker show-menu-arrow" style=" font-size: large; height: 50px; " id="exampleFormControlSelect1">
+                    <% location.forEach(function(locationDetail){ %>
+                    <option  value=<%=locationDetail._id %>> <%=locationDetail.nameLocation %>
+                    </option>
+                    <%})%>
+                </select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="full_name" class="col-md-4 col-form-label text-md-right" style="padding-left: 100px; font-size:x-large;"> Mô tả : </label>
+            <div class="col-md-6">
+                <div class="summernote" id="description" style="margin-left: 5px;" ></div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="full_name" class="col-md-4 col-form-label text-md-right" style="padding-left: 100px; font-size:x-large;"> Kế hoạch tour : </label>
+            <div class="col-md-6">
+                <div class="summernote" id="plan" style="margin-left: 5px;" ></div>
+            </div>
+        </div>
+        <div class="form-group row" style="margin-top:30px">
+            <label for="full_name" class="col-md-4 col-form-label text-md-right" style="padding-left: 100px; font-size:x-large;"> Giá chuyến đi : </label>
+            <div class="col-md-6">
+                <input  type="text" id="price" class="form-control submit" style="height: 50px;" placeholder="VND/người/ngày" >
+            </div>
+        </div>
+        <div class="form-group row" style="margin-top:30px">
+            <label for="full_name" class="col-md-4 col-form-label text-md-right" style="padding-left: 100px; font-size:x-large;"> Hình ảnh về tour : </label>
+            <div class="col-md-6">
+                <input type="file" id="image" name="files" multiple style="margin-top: 10px;">
+            </div>
+        </div>
+        <button id="submit" class="btn btn-primary" style="margin-left: 1100px; font-size: 20px; margin-bottom: 20px;">Đăng bài</button>
+    </div>
+</div>
+<script>
+    
+    $(document).ready(function () {
+        $('.summernote').summernote({
+            lang: 'ko-KR'
+        });
+        const validateNumber = (input)=>{
+        const data = parseFloat(input);
+        if(isNaN(data)){
+             alert('Vui lòng nhập số cho giá tiền ');
+             return ;
+        }
+            return data
+        }
+        const validateBody = async (input,body)=>{
+            const data ={}
+            for(const key of input){
+                if(body[key] || body[key] != ''){
+                    data[key] = body[key];
+                }else{
+                    alert('vui lòng nhập '+ key);
+                    return false;
+                }
+            }
+            return true;
+        }
+        $('#submit').click( async()=>{
+            const price = await validateNumber($('#price').val());
+            const name = $('#name').val();
+            const localtionID = $('#localtionID').val();
+            const description = $('#description').summernote('code');
+            const plan = $('#plan').summernote('code');
+            let formData = new FormData();
+            jQuery.each(jQuery('#image')[0].files, function(i, file) {
+                formData.append('image', file);
+            });
+            const body = {
+                name ,localtionID ,description,plan,price
+            }
+              const keys = Object.keys(body);
+             const data = await validateBody(keys,body,formData);
+             if(data){
+                 formData.append('name',body.name);
+                 formData.append('localtionID',body.localtionID);
+                 formData.append('description',body.description);
+                 formData.append('plan',body.plan);
+                 formData.append('price',body.price);
+                $.ajax({
+                    type: "POST",
+                    url: "http://localhost:3000/adminPost/",
+                    data: formData,
+                    contentType: false, 
+                    processData: false,
+                    success: function (data) {
+                        console.log(data,"hâhha");
+                        alert('Success! bạn đăng đăng thành công và chờ được xet duyệt');
+                        window.location.replace("http://localhost:3000/adminPost/myPost");
+                    },
+                    error: function (err, message) {
+                        console.log(err , message) ;
+                        alert('text status ' + ', err ' + err.responseJSON.message)
+                    }
+                });
+             }
+        })
+    })
+</script>

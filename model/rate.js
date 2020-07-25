@@ -8,3 +8,6 @@ const schema = new Schema({
     createAt :Date,
     isDelete:{type:Boolean, default :false}
 });
+
+const RateModel = mongoose.model('Rate',schema);
+module.exports =RateModel;

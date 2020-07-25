@@ -29,7 +29,6 @@ const authUsers = async (req, res, next) => {
         req.user = decode;
         return next();
     } catch (err) {
-        console.log("huhuhuhu");
         return res.json({
             code: 400,
             mess: err,
